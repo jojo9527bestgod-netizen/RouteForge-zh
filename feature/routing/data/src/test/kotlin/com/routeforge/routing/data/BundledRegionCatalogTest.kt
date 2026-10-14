@@ -51,7 +51,7 @@ class BundledRegionCatalogTest {
         val beforeDownload = catalog.listRegions().first { it.id == "downloadable-region" }
         assertEquals(RegionStatus.NOT_DOWNLOADED, beforeDownload.status)
 
-        File(segmentDir, "downloadable.rd5").writeBytes(byteArrayOf(1, 2, 3))
+        File(segmentDir, "downloadable.rd5").writeCompleteTileHeader()
         val afterDownload = catalog.listRegions().first { it.id == "downloadable-region" }
 
         assertEquals(RegionStatus.DOWNLOADED, afterDownload.status)
@@ -83,7 +83,7 @@ class BundledRegionCatalogTest {
         @TempDir profileDir: File,
     ) {
         val catalog = BundledRegionCatalog(segmentDir, profileDir, ::fakeAssetOpener)
-        File(segmentDir, "tile-a.rd5").writeBytes(byteArrayOf(1))
+        File(segmentDir, "tile-a.rd5").writeCompleteTileHeader()
 
         val region = catalog.listRegions().first { it.id == "multi-tile-region" }
 
@@ -112,7 +112,7 @@ class BundledRegionCatalogTest {
         @TempDir profileDir: File,
     ) {
         val catalog = BundledRegionCatalog(segmentDir, profileDir, ::fakeAssetOpener)
-        File(segmentDir, "W35_S10.rd5").writeBytes(byteArrayOf(1))
+        File(segmentDir, "W35_S10.rd5").writeCompleteTileHeader()
 
         val region = catalog.regionContaining(latitude = -8.05, longitude = -34.9)
 
@@ -147,7 +147,7 @@ class BundledRegionCatalogTest {
         @TempDir profileDir: File,
     ) {
         val catalog = BundledRegionCatalog(segmentDir, profileDir, ::fakeAssetOpener)
-        File(segmentDir, "W35_S10.rd5").writeBytes(byteArrayOf(1))
+        File(segmentDir, "W35_S10.rd5").writeCompleteTileHeader()
 
         val region = catalog.listRegions().firstOrNull { it.id == "W35_S10" }
 

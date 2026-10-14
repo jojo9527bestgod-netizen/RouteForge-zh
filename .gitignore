@@ -16,3 +16,20 @@ docs/superpowers/specs/
 /.superpowers/
 feature/routing/data/src/main/assets/tiles/*.rd5
 /.handoffs/
+
+# 本地签名、凭据、工具和手机记录不进入公开仓库。
+*.keystore
+*.jks
+*.p12
+*.key
+*.pem
+.env
+.env.*
+!.env.example
+.toolchain/
+private-signing/
+evidence/
+dist/
+downloads/
+archive/
+/LOCAL_BUILD_NOTES.md

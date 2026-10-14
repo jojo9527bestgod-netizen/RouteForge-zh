@@ -2,6 +2,7 @@ package com.routeforge.simulation.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.routeforge.coredomain.FavoriteRoutesRepository
 import com.routeforge.coredomain.MockLocationAuthorizationChecker
 import com.routeforge.coredomain.Result
 import com.routeforge.coredomain.holder.LastComputedRouteHolder
@@ -66,6 +67,7 @@ class SimulationViewModel(
     private val lastKnownRealLocationHolder: LastKnownRealLocationHolder,
     private val pendingTeleportTargetHolder: PendingTeleportTargetHolder,
     observeMapStyle: ObserveMapStyleUseCase,
+    private val favoriteRoutesRepository: FavoriteRoutesRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow(SimulationState())
     val state = _state.asStateFlow()
@@ -165,6 +167,11 @@ class SimulationViewModel(
             }
             SimulationAction.OnCancelRouteClick -> _state.update { it.copy(isPendingCancelRoute = true) }
             SimulationAction.OnDismissCancelRoute -> _state.update { it.copy(isPendingCancelRoute = false) }
+            SimulationAction.OnSaveRouteClick ->
+                _state.update { it.copy(routeToSave = it.loadedRoute) }
+            is SimulationAction.OnRouteNameInputChange -> _state.update { it.copy(routeNameInput = action.value) }
+            SimulationAction.OnConfirmSaveRoute -> confirmSaveRoute()
+            SimulationAction.OnDismissSaveRoute -> _state.update { it.copy(routeToSave = null, routeNameInput = "") }
             is SimulationAction.OnJoystickDrag -> onJoystickDrag(action.bearingDegrees)
             SimulationAction.OnJoystickReleased -> pauseSimulationUseCase()
             SimulationAction.OnToggleJoystick -> onToggleJoystick()
@@ -189,6 +196,15 @@ class SimulationViewModel(
             SimulationAction.OnConfirmSwitchRouteMode -> confirmSwitchRouteMode()
             SimulationAction.OnDismissSwitchRouteMode -> _state.update { it.copy(pendingRouteModeSwitch = null) }
         }
+    }
+
+    private fun confirmSaveRoute() {
+        val route = _state.value.routeToSave ?: return
+        val name = _state.value.routeNameInput.trim()
+        if (route.points.size < 2 || name.isBlank()) return
+        favoriteRoutesRepository.add(name, route.points)
+        _state.update { it.copy(routeToSave = null, routeNameInput = "") }
+        viewModelScope.launch { _events.send(SimulationEvent.RouteSaved) }
     }
 
     /** Applies a committed waypoint edit (spec 008) exactly like [confirmSwitchRouteMode] applies

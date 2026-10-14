@@ -32,6 +32,8 @@ data class RouteRequestState(
      *  (independent of [route], so it never opens the ready sheet). Null means the map shows the
      *  default straight-line draft preview. */
     val previewMode: RoutePlaybackMode? = null,
+    /** Null means the default road-following mode; straight lines require an explicit choice. */
+    val selectedDraftMode: RoutePlaybackMode? = null,
     val previewRoute: Route? = null,
     /** True while [computeDraftPreview]/[attemptModePreview] is running — drives a loading spinner
      *  on whichever button triggered it, instead of leaving the user guessing why nothing changed

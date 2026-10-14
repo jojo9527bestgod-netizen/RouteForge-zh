@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FileDownload
@@ -66,6 +67,7 @@ internal fun RouteReadySheet(
     isComputingPreview: Boolean,
     onExport: (RouteFileFormat) -> Unit,
     onUseRoute: () -> Unit,
+    onSaveRoute: () -> Unit,
     onSwitchMode: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -76,7 +78,7 @@ internal fun RouteReadySheet(
                 text =
                     stringResource(
                         R.string.routing_route_ready_label,
-                        (chosenMode ?: route.mode).name,
+                        (chosenMode ?: route.mode).localizedLabel(),
                         route.distanceMeters.toInt(),
                         route.geometry.size,
                     ),
@@ -92,6 +94,10 @@ internal fun RouteReadySheet(
                     Text(stringResource(R.string.routing_export_gpx_button))
                 }
             }
+            TextButton(onClick = onSaveRoute, modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.Filled.Bookmark, contentDescription = null)
+                Text(stringResource(R.string.routing_save_route_button))
+            }
             TextButton(onClick = onSwitchMode, modifier = Modifier.fillMaxWidth(), enabled = !isComputingPreview) {
                 if (isComputingPreview) {
                     CircularProgressIndicator(modifier = Modifier.size(SwitchModeSpinnerSize))
@@ -101,7 +107,7 @@ internal fun RouteReadySheet(
                         contentDescription = null,
                     )
                 }
-                Text(stringResource(R.string.routing_switch_route_mode_button))
+                Text(stringResource(if (route.mode == RoutePlaybackMode.GUIDED) R.string.routing_switch_to_free_roam else R.string.routing_switch_to_guided))
             }
             Button(onClick = onUseRoute, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Filled.Check, contentDescription = null)

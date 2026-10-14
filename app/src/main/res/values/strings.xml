@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RouteForge</string>
+    <string name="app_name">RouteForge Chinese</string>
     <string name="tab_simulate_label">Simulate</string>
     <string name="tab_plan_route_label">Plan Route</string>
     <string name="tab_search_label">Search</string>

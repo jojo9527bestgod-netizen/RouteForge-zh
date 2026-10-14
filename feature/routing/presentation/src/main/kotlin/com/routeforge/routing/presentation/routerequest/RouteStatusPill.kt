@@ -17,7 +17,7 @@ internal fun RouteStatusPill(
         state.route?.let { route ->
             stringResource(
                 R.string.routing_route_ready_label,
-                (state.chosenMode ?: route.mode).name,
+                (state.chosenMode ?: route.mode).localizedLabel(),
                 route.distanceMeters.toInt(),
                 route.geometry.size,
             )

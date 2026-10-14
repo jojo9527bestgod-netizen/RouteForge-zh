@@ -1,0 +1,12 @@
+<resources>
+    <string name="address_search_query_placeholder">搜索地点</string>
+    <string name="address_search_submit_button">搜索</string>
+    <string name="address_search_no_results_message">未找到相关地点。</string>
+    <string name="address_search_error_message">暂时无法搜索，请检查网络连接后重试。</string>
+    <string name="address_search_teleport_button">定位到这里</string>
+    <string name="address_search_save_favorite_button">收藏地点</string>
+    <string name="address_search_favorite_name_title">收藏地点</string>
+    <string name="address_search_favorite_name_label">名称</string>
+    <string name="address_search_favorite_save_button">保存</string>
+    <string name="address_search_cancel_button">取消</string>
+</resources>

@@ -1,0 +1,1674 @@
+[
+  {
+    "component": "androidx.activity:activity-compose:1.13.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/activity#1.13.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.activity:activity-ktx:1.13.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/activity#1.13.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.activity:activity:1.13.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/activity#1.13.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.annotation:annotation-experimental:1.4.1",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/annotation#1.4.1",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.annotation:annotation-jvm:1.10.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/annotation#1.10.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.annotation:annotation:1.10.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/annotation#1.10.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.appcompat:appcompat-resources:1.7.1",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.1",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.appcompat:appcompat:1.7.1",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.1",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.arch.core:core-common:2.2.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/arch-core#2.2.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.arch.core:core-runtime:2.2.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/arch-core#2.2.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.autofill:autofill:1.0.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.collection:collection-jvm:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/collection#1.5.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.collection:collection-ktx:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/collection#1.5.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.collection:collection:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/collection#1.5.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.animation:animation-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-animation#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.animation:animation-core-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-animation#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.animation:animation-core:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-animation#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.animation:animation:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-animation#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.foundation:foundation-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-foundation#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.foundation:foundation-layout-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-foundation#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.foundation:foundation-layout:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-foundation#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.foundation:foundation:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-foundation#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.material3:material3-android:1.4.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-material3#1.4.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.material3:material3:1.4.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-material3#1.4.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.material:material-icons-core-android:1.7.8",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-material#1.7.8",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.material:material-icons-core:1.7.8",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-material#1.7.8",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.material:material-icons-extended-android:1.7.8",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-material#1.7.8",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.material:material-icons-extended:1.7.8",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-material#1.7.8",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.material:material-ripple-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-material#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.material:material-ripple:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-material#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.runtime:runtime-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-runtime#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.runtime:runtime-annotation-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-runtime#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.runtime:runtime-annotation:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-runtime#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.runtime:runtime-retain-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-runtime#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.runtime:runtime-retain:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-runtime#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.runtime:runtime-saveable-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-runtime#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.runtime:runtime-saveable:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-runtime#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.runtime:runtime:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-runtime#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.ui:ui-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.ui:ui-geometry-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.ui:ui-geometry:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.ui:ui-graphics-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.ui:ui-graphics:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.ui:ui-text-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.ui:ui-text:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.ui:ui-tooling-preview-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.ui:ui-tooling-preview:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.ui:ui-unit-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.ui:ui-unit:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.ui:ui-util-android:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.compose.ui:ui-util:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose.ui:ui:1.12.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/compose-ui#1.12.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.compose:compose-bom:2026.08.00",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.concurrent:concurrent-futures:1.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/topic/libraries/architecture/index.html",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.core:core-ktx:1.19.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/core#1.19.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.core:core-viewtree:1.0.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/core#1.0.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.core:core:1.19.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/core#1.19.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.cursoradapter:cursoradapter:1.0.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "http://developer.android.com/tools/extras/support-library.html",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.customview:customview-poolingcontainer:1.0.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/customview#1.0.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.customview:customview:1.0.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "http://developer.android.com/tools/extras/support-library.html",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.drawerlayout:drawerlayout:1.0.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "http://developer.android.com/tools/extras/support-library.html",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.emoji2:emoji2-views-helper:1.4.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/emoji2#1.4.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.emoji2:emoji2:1.4.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/emoji2#1.4.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.fragment:fragment-ktx:1.8.8",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/fragment#1.8.8",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.fragment:fragment:1.8.8",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/fragment#1.8.8",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.graphics:graphics-path:1.0.1",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/graphics#1.0.1",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.interpolator:interpolator:1.0.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "http://developer.android.com/tools/extras/support-library.html",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-common-java8:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-common-jvm:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-common:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-livedata-core-ktx:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-livedata-core:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-livedata:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-process:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-runtime-android:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-runtime-compose-android:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-runtime-compose:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-runtime-ktx-android:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-runtime-ktx:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-runtime:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-viewmodel-android:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-viewmodel-compose-android:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-viewmodel-savedstate-android:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.lifecycle:lifecycle-viewmodel:2.11.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/lifecycle#2.11.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.loader:loader:1.0.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "http://developer.android.com/tools/extras/support-library.html",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.navigation:navigation-common-android:2.10.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/navigation#2.10.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.navigation:navigation-common:2.10.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/navigation#2.10.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.navigation:navigation-compose-android:2.10.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/navigation#2.10.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.navigation:navigation-compose:2.10.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/navigation#2.10.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.navigation:navigation-runtime-android:2.10.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/navigation#2.10.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.navigation:navigation-runtime:2.10.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/navigation#2.10.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.navigationevent:navigationevent-android:1.1.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/navigationevent#1.1.2",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.navigationevent:navigationevent-compose-android:1.1.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/navigationevent#1.1.2",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.navigationevent:navigationevent-compose:1.1.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/navigationevent#1.1.2",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.navigationevent:navigationevent:1.1.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/navigationevent#1.1.2",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.profileinstaller:profileinstaller:1.4.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/profileinstaller#1.4.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.resourceinspection:resourceinspection-annotation:1.0.1",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/resourceinspection#1.0.1",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.savedstate:savedstate-android:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/savedstate#1.5.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.savedstate:savedstate-compose-android:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/savedstate#1.5.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.savedstate:savedstate-compose:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/savedstate#1.5.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.savedstate:savedstate-ktx:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/savedstate#1.5.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.savedstate:savedstate:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/savedstate#1.5.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.startup:startup-runtime:1.2.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/startup#1.2.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.tracing:tracing:1.2.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/tracing#1.2.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.vectordrawable:vectordrawable-animated:1.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.vectordrawable:vectordrawable:1.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.versionedparcelable:versionedparcelable:1.1.1",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "http://developer.android.com/tools/extras/support-library.html",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.viewpager:viewpager:1.0.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "http://developer.android.com/tools/extras/support-library.html",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.window:window-core-android:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/window#1.5.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "androidx.window:window-core:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/window#1.5.0",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "androidx.window:window:1.5.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://developer.android.com/jetpack/androidx/releases/window#1.5.0",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "co.touchlab:stately-concurrency-jvm:2.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/touchlab/Stately",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "co.touchlab:stately-concurrency:2.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/touchlab/Stately",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "co.touchlab:stately-concurrent-collections-jvm:2.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/touchlab/Stately",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "co.touchlab:stately-concurrent-collections:2.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/touchlab/Stately",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "co.touchlab:stately-strict-jvm:2.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/touchlab/Stately",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "co.touchlab:stately-strict:2.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/touchlab/Stately",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "com.google.guava:listenablefuture:1.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/google/guava",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "com.squareup.okhttp3:okhttp-android:5.3.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://square.github.io/okhttp/",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "com.squareup.okhttp3:okhttp:5.3.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://square.github.io/okhttp/",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "com.squareup.okio:okio-jvm:3.17.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/square/okio/",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "com.squareup.okio:okio:3.17.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/square/okio/",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.insert-koin:koin-android:4.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://insert-koin.io/",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.insert-koin:koin-androidx-compose:4.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://insert-koin.io/",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.insert-koin:koin-compose-android:4.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://insert-koin.io/",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.insert-koin:koin-compose-viewmodel-android:4.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://insert-koin.io/",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.insert-koin:koin-compose-viewmodel:4.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://insert-koin.io/",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.insert-koin:koin-compose:4.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://insert-koin.io/",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.insert-koin:koin-core-jvm:4.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://insert-koin.io/",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.insert-koin:koin-core-viewmodel-android:4.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://insert-koin.io/",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.insert-koin:koin-core-viewmodel:4.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://insert-koin.io/",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.insert-koin:koin-core:4.1.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://insert-koin.io/",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-client-content-negotiation-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-client-content-negotiation:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-client-core-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-client-core:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-client-okhttp-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-client-okhttp:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-events-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-events:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-http-cio-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-http-cio:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-http-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-http:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-io-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-io:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-network-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-network:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-serialization-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-serialization-kotlinx-json-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-serialization-kotlinx-json:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-serialization-kotlinx-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-serialization-kotlinx:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-serialization:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-sse-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-sse:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-utils-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-utils:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-websocket-serialization-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-websocket-serialization:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "io.ktor:ktor-websockets-jvm:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "io.ktor:ktor-websockets:3.5.2",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/ktorio/ktor",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.androidx.lifecycle:lifecycle-common:2.11.0-beta01",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-multiplatform",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose:2.9.6",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.androidx.lifecycle:lifecycle-runtime:2.9.6",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0-beta01",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-multiplatform",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-savedstate:2.11.0-beta01",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-multiplatform",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel:2.11.0-beta01",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-multiplatform",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.androidx.savedstate:savedstate-compose:1.3.6",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.androidx.savedstate:savedstate:1.3.6",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.animation:animation-core:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.animation:animation:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.annotation-internal:annotation:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.collection-internal:collection:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.foundation:foundation-layout:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.foundation:foundation:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.runtime:runtime-saveable:1.11.0-rc01",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-multiplatform",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.runtime:runtime:1.11.0-rc01",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-multiplatform",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.ui:ui-geometry:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.ui:ui-graphics:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.ui:ui-text:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.ui:ui-unit:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.ui:ui-util:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.compose.ui:ui:1.8.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/compose-jb",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.kotlin:kotlin-stdlib-common:2.4.20",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://kotlinlang.org/",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.kotlin:kotlin-stdlib:2.4.20",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://kotlinlang.org/",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.coroutines",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.coroutines",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.coroutines",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.coroutines",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.coroutines",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-io-bytestring-jvm:0.9.1",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx-io",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.9.1",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx-io",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-io-core-jvm:0.9.1",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx-io",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-io-core:0.9.1",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx-io",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-serialization-bom:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.serialization",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.serialization",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-serialization-core:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.serialization",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-serialization-json-io-jvm:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.serialization",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-serialization-json-io:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.serialization",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.serialization",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0",
+    "licenseNames": [
+      "Apache-2.0"
+    ],
+    "projectUrl": "https://github.com/Kotlin/kotlinx.serialization",
+    "hasCachedBinary": false
+  },
+  {
+    "component": "org.jetbrains:annotations:23.0.0",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/JetBrains/java-annotations",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.jspecify:jspecify:1.0.0",
+    "licenseNames": [
+      "The Apache License, Version 2.0"
+    ],
+    "projectUrl": "http://jspecify.org/",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.osmdroid:osmdroid-android:6.1.20",
+    "licenseNames": [
+      "The Apache Software License, Version 2.0"
+    ],
+    "projectUrl": "https://github.com/osmdroid/osmdroid",
+    "hasCachedBinary": true
+  },
+  {
+    "component": "org.slf4j:slf4j-api:2.0.18",
+    "licenseNames": [
+      "MIT"
+    ],
+    "projectUrl": "https://www.slf4j.org/license.html",
+    "hasCachedBinary": true
+  }
+]

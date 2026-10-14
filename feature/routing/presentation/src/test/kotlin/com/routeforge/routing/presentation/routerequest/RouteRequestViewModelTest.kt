@@ -374,14 +374,15 @@ class RouteRequestViewModelTest {
     // --- Region-awareness before play ---
 
     @Test
-    fun `waypoints with no matching region data at all proceed straight to computation`() {
+    fun `waypoints without road coverage do not silently become a straight-line route`() {
         val viewModel = createViewModel()
         viewModel.tapTwoPoints()
 
         viewModel.onAction(RouteRequestAction.OnRequestRoute)
 
         assertNull(viewModel.state.value.missingRegionsWarning)
-        assertNotNull(viewModel.state.value.route)
+        assertNull(viewModel.state.value.route)
+        assertEquals(RouteRequestError.MODE_PREVIEW_NO_PATH, viewModel.state.value.errorType)
     }
 
     @Test
@@ -411,7 +412,7 @@ class RouteRequestViewModelTest {
     }
 
     @Test
-    fun `continuing anyway from the missing regions warning proceeds with computation`() {
+    fun `explicitly choosing straight lines from the missing regions warning computes free-roam`() {
         regionCatalog.regions =
             listOf(
                 Region(
@@ -435,6 +436,7 @@ class RouteRequestViewModelTest {
 
         assertNull(viewModel.state.value.missingRegionsWarning)
         assertNotNull(viewModel.state.value.route)
+        assertEquals(RoutePlaybackMode.FREE_ROAM, viewModel.state.value.chosenMode)
     }
 
     @Test
@@ -470,7 +472,7 @@ class RouteRequestViewModelTest {
     // --- User Story 1: mode gate ---
 
     @Test
-    fun `requesting a route with no preview selected finalizes free-roam directly, without asking`() {
+    fun `requesting a route with no preview selected follows roads by default`() {
         routingEngine.snappableLatitudes = setOf(1.0, 2.0)
         routingEngine.computePathResult =
             Route(
@@ -484,8 +486,8 @@ class RouteRequestViewModelTest {
         viewModel.onAction(RouteRequestAction.OnRequestRoute)
 
         val state = viewModel.state.value
-        assertEquals(RoutePlaybackMode.FREE_ROAM, state.route?.mode)
-        assertEquals(RoutePlaybackMode.FREE_ROAM, state.chosenMode)
+        assertEquals(RoutePlaybackMode.GUIDED, state.route?.mode)
+        assertEquals(RoutePlaybackMode.GUIDED, state.chosenMode)
         assertTrue(!state.isComputing)
     }
 
@@ -532,33 +534,34 @@ class RouteRequestViewModelTest {
     }
 
     @Test
-    fun `auto-resolving to free-roam because guided isn't viable leaves no alternate to switch to`() {
+    fun `unavailable road routing leaves no playable straight-line fallback`() {
         val viewModel = createViewModel()
         viewModel.tapTwoPoints()
 
         viewModel.onAction(RouteRequestAction.OnRequestRoute)
 
         val state = viewModel.state.value
-        assertEquals(RoutePlaybackMode.FREE_ROAM, state.chosenMode)
+        assertNull(state.chosenMode)
+        assertNull(state.route)
         assertNull(state.route?.alternateGeometry)
         assertNull(state.route?.alternateDistanceMeters)
     }
 
     @Test
-    fun `an unroutable point skips straight to free-roam with no error shown`() {
+    fun `an unroutable point shows an error without producing a straight-line route`() {
         val viewModel = createViewModel()
         viewModel.tapTwoPoints()
 
         viewModel.onAction(RouteRequestAction.OnRequestRoute)
 
         val state = viewModel.state.value
-        assertEquals(RoutePlaybackMode.FREE_ROAM, state.chosenMode)
-        assertNotNull(state.route)
-        assertNull(state.errorType)
+        assertNull(state.chosenMode)
+        assertNull(state.route)
+        assertEquals(RouteRequestError.MODE_PREVIEW_NO_PATH, state.errorType)
     }
 
     @Test
-    fun `no connecting path between snapped points also skips straight to free-roam`() {
+    fun `disconnected roads show an error without a straight-line fallback`() {
         routingEngine.snappableLatitudes = setOf(1.0, 2.0)
         routingEngine.computePathResult = null
         val viewModel = createViewModel()
@@ -566,8 +569,9 @@ class RouteRequestViewModelTest {
 
         viewModel.onAction(RouteRequestAction.OnRequestRoute)
 
-        assertEquals(RoutePlaybackMode.FREE_ROAM, viewModel.state.value.chosenMode)
-        assertNull(viewModel.state.value.errorType)
+        assertNull(viewModel.state.value.chosenMode)
+        assertNull(viewModel.state.value.route)
+        assertEquals(RouteRequestError.MODE_PREVIEW_NO_PATH, viewModel.state.value.errorType)
     }
 
     @Test
@@ -578,11 +582,11 @@ class RouteRequestViewModelTest {
         val viewModel = createViewModel()
         viewModel.tapTwoPoints()
         viewModel.onAction(RouteRequestAction.OnRequestRoute)
-        assertEquals(RoutePlaybackMode.FREE_ROAM, viewModel.state.value.chosenMode)
+        assertEquals(RoutePlaybackMode.GUIDED, viewModel.state.value.chosenMode)
 
         viewModel.onAction(RouteRequestAction.OnRequestRoute)
 
-        assertEquals(RoutePlaybackMode.FREE_ROAM, viewModel.state.value.chosenMode)
+        assertEquals(RoutePlaybackMode.GUIDED, viewModel.state.value.chosenMode)
         assertNotNull(viewModel.state.value.route)
     }
 

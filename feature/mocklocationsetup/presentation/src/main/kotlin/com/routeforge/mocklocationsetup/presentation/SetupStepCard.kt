@@ -88,6 +88,13 @@ internal fun SetupStepCard(
     onAction: (MockLocationSetupAction) -> Unit,
 ) {
     val stepNumber = SetupStepId.entries.indexOf(step.id) + 1
+    val (titleResource, explanationResource, instructionsResource) =
+        when (step.id) {
+            SetupStepId.ENABLE_DEVELOPER_OPTIONS ->
+                Triple(R.string.setup_developer_title, R.string.setup_developer_explanation, R.string.setup_developer_instructions)
+            SetupStepId.SELECT_MOCK_LOCATION_APP ->
+                Triple(R.string.setup_mock_app_title, R.string.setup_mock_app_explanation, R.string.setup_mock_app_instructions)
+        }
     Surface(
         shape = CardShape,
         color = MaterialTheme.colorScheme.surfaceVariant,
@@ -103,7 +110,7 @@ internal fun SetupStepCard(
                         color = MaterialTheme.colorScheme.primary,
                     )
                     Text(
-                        text = step.title,
+                        text = stringResource(titleResource),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -111,7 +118,7 @@ internal fun SetupStepCard(
             }
             Spacer(modifier = Modifier.height(StepSectionSpacing))
             Text(
-                text = step.explanation,
+                text = stringResource(explanationResource),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.85f),
             )
@@ -122,7 +129,7 @@ internal fun SetupStepCard(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = step.instructions,
+                    text = stringResource(instructionsResource),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                     modifier = Modifier.padding(InstructionsPanelPadding),

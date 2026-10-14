@@ -15,6 +15,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 compileSdk = libs.intVersion("androidCompileSdk")
+                compileSdkMinor = 0
 
                 defaultConfig {
                     minSdk = libs.intVersion("androidMinSdk")

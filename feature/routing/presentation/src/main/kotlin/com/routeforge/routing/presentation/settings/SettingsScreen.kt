@@ -8,21 +8,32 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,6 +59,7 @@ private val QuotaOptions: List<Pair<Long?, Int>> =
 
 private val MapStyleOptions: List<Pair<MapStyle, Int>> =
     listOf(
+        MapStyle.OSM_FR to R.string.settings_map_style_osm_fr,
         MapStyle.STANDARD to R.string.settings_map_style_standard,
         MapStyle.TOPOGRAPHIC to R.string.settings_map_style_topographic,
     )
@@ -67,13 +79,15 @@ fun SettingsScreen(
     onAction: (SettingsAction) -> Unit,
     onManageDownloadsClick: () -> Unit = {},
 ) {
+    var showLicenses by remember { mutableStateOf(false) }
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { paddingValues ->
         Column(
             modifier =
                 Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(Spacing.ScreenContent),
+                    .padding(Spacing.ScreenContent)
+                    .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(SectionSpacing),
         ) {
             Text(
@@ -91,6 +105,32 @@ fun SettingsScreen(
                 mapStyle = state.mapStyle,
                 onMapStyleSelected = { onAction(SettingsAction.OnMapStyleSelected(it)) },
             )
+            TextButton(onClick = { showLicenses = true }, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.settings_open_source_button))
+            }
+        }
+    }
+    if (showLicenses) {
+        val context = LocalContext.current
+        val notices = remember(context) {
+            context.assets.open("OPEN_SOURCE_NOTICES.txt").bufferedReader(Charsets.UTF_8).use { it.readText() }
+        }
+        ModalBottomSheet(
+            onDismissRequest = { showLicenses = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        ) {
+            Column(modifier = Modifier.fillMaxWidth().heightIn(max = 600.dp).padding(Spacing.ScreenContent)) {
+                Text(stringResource(R.string.settings_open_source_title), style = MaterialTheme.typography.titleLarge)
+                Spacer(modifier = Modifier.height(16.dp))
+                LazyColumn(modifier = Modifier.weight(1f, fill = false)) {
+                    items(notices.chunked(4000)) { section ->
+                        Text(section, style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+                TextButton(onClick = { showLicenses = false }) {
+                    Text(stringResource(R.string.settings_open_source_close))
+                }
+            }
         }
     }
 }

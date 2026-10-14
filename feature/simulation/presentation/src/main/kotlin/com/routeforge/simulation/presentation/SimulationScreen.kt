@@ -3,6 +3,7 @@ package com.routeforge.simulation.presentation
 import android.Manifest
 import android.graphics.Color as AndroidColor
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Signpost
 import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material.icons.filled.Straighten
@@ -31,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -40,6 +43,7 @@ import com.routeforge.coredomain.model.RoutePlaybackMode
 import com.routeforge.designsystem.components.AutoDismissConfirmationPill
 import com.routeforge.designsystem.components.FabColumn
 import com.routeforge.designsystem.components.TopBanner
+import com.routeforge.designsystem.components.NameEntryConfirmationSheet
 import com.routeforge.designsystem.map.RouteForgeMap
 import com.routeforge.designsystem.map.RouteForgeMapMarker
 import com.routeforge.designsystem.map.RouteForgeMapMarkerIcon
@@ -80,6 +84,7 @@ fun SimulationRoot(
     waypointEditViewModel: WaypointEditViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     val editState by waypointEditViewModel.state.collectAsStateWithLifecycle()
     var showWaypointsUpdatedConfirmation by remember { mutableStateOf(false) }
 
@@ -109,6 +114,7 @@ fun SimulationRoot(
         viewModel.events.collect { event ->
             when (event) {
                 SimulationEvent.NavigateToSetup -> onOpenSetup()
+                SimulationEvent.RouteSaved -> Toast.makeText(context, R.string.simulation_route_saved, Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -485,11 +491,18 @@ private fun BoxScope.SimulationRouteControls(
 ) {
     if (state.loadedRoute == null) return
     val activeRoute = state.loadedRoute
+    val suggestedName = stringResource(R.string.simulation_save_route_default_name)
     FabColumn(alignment = Alignment.BottomEnd) {
         FloatingActionButton(onClick = { onAction(SimulationAction.OnCancelRouteClick) }) {
             Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.simulation_cancel_route_button))
         }
         PlaybackButton(state = state, onAction = onAction)
+        FloatingActionButton(onClick = {
+            onAction(SimulationAction.OnRouteNameInputChange(suggestedName))
+            onAction(SimulationAction.OnSaveRouteClick)
+        }) {
+            Icon(Icons.Filled.Bookmark, contentDescription = stringResource(R.string.simulation_save_route_button))
+        }
         if (activeRoute.alternateGeometry != null) {
             FloatingActionButton(onClick = { onAction(SimulationAction.OnSwitchRouteModeClick) }) {
                 Icon(
@@ -572,6 +585,18 @@ private fun SimulationDialogs(
         StartRouteDialog(
             state = state,
             onAction = onAction,
+        )
+    }
+    if (state.routeToSave != null) {
+        NameEntryConfirmationSheet(
+            title = stringResource(R.string.simulation_save_route_title),
+            nameInput = state.routeNameInput,
+            onNameChange = { onAction(SimulationAction.OnRouteNameInputChange(it)) },
+            nameLabel = stringResource(R.string.simulation_route_name_label),
+            confirmLabel = stringResource(R.string.simulation_save_route_confirm),
+            dismissLabel = stringResource(R.string.simulation_save_route_dismiss),
+            onConfirm = { onAction(SimulationAction.OnConfirmSaveRoute) },
+            onDismiss = { onAction(SimulationAction.OnDismissSaveRoute) },
         )
     }
 }

@@ -1,0 +1,17 @@
+<resources>
+    <string name="setup_header_title">设置 RouteForge</string>
+    <string name="setup_header_subtitle">完成以下设置，即可在此手机上模拟位置。</string>
+    <string name="setup_progress_label">已完成 %1$d / %2$d 项</string>
+    <string name="setup_step_number_label">第 %1$d 步，共 %2$d 步</string>
+    <string name="setup_open_settings_button">打开系统设置</string>
+    <string name="setup_ready_title">设置完成</string>
+    <string name="setup_ready_subtitle">正在打开地图…</string>
+    <string name="setup_blocked_title">开发者选项已被禁用</string>
+    <string name="setup_blocked_message">设备管理员已禁用开发者选项。此设备限制了模拟定位，RouteForge 无法启用该功能。</string>
+    <string name="setup_developer_title">开启开发者选项</string>
+    <string name="setup_developer_explanation">Android 的模拟定位设置位于开发者选项中，需要先开启开发者选项。</string>
+    <string name="setup_developer_instructions">打开系统设置中的“关于手机”，连续点击“版本号”7 次，直到提示已进入开发者模式。部分手机需要先进入“版本信息”。</string>
+    <string name="setup_mock_app_title">选择模拟位置信息应用</string>
+    <string name="setup_mock_app_explanation">Android 同一时间只能由一个应用提供模拟位置。请将 RouteForge 设为模拟位置信息应用。</string>
+    <string name="setup_mock_app_instructions">打开“开发者选项”，找到“选择模拟位置信息应用”（部分手机显示为“选择模拟位置应用”），选择 RouteForge。</string>
+</resources>

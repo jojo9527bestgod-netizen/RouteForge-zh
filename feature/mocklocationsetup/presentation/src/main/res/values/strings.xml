@@ -8,4 +8,10 @@
     <string name="setup_ready_subtitle">Taking you to the map…</string>
     <string name="setup_blocked_title">Developer Options is disabled</string>
     <string name="setup_blocked_message">Your device administrator has disabled Developer Options. RouteForge cannot enable mock locations on a managed device where this capability is restricted.</string>
+    <string name="setup_developer_title">Enable Developer Options</string>
+    <string name="setup_developer_explanation">RouteForge needs Developer Options turned on before it can inject a mock location, since Android hides mock-location controls until Developer Options is enabled.</string>
+    <string name="setup_developer_instructions">Open About Phone and tap the Build Number entry 7 times until you see "You are now a developer".</string>
+    <string name="setup_mock_app_title">Select mock location app</string>
+    <string name="setup_mock_app_explanation">Android only allows one app at a time to simulate GPS locations. RouteForge must be chosen as that app before it can inject a route.</string>
+    <string name="setup_mock_app_instructions">Open Developer Options, find "Select mock location app", and choose RouteForge.</string>
 </resources>

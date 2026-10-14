@@ -67,7 +67,7 @@
     <string name="simulation_start_route_dialog_confirm">Start</string>
     <string name="simulation_start_route_dialog_cancel">Cancel</string>
     <string name="simulation_cancel_route_confirm_title">Cancel this route?</string>
-    <string name="simulation_cancel_route_confirm_message">This will stop playback (if running) and clear the loaded route. You\'ll need to plan it again to play it.</string>
+    <string name="simulation_cancel_route_confirm_message">This will stop playback and clear the loaded route. Do not cancel only dismisses this dialog. To reuse the route later, first save it with the bookmark button.</string>
     <string name="simulation_cancel_route_confirm_button">Cancel route</string>
     <string name="simulation_cancel_route_dismiss_button">Keep route</string>
     <string name="simulation_edit_route_button">Edit route</string>
@@ -88,5 +88,15 @@
     <string name="simulation_missing_regions_message">Guided routing needs about %1$d MB more map data for this edit</string>
     <string name="simulation_missing_regions_go_to_downloads">Go to downloads</string>
     <string name="simulation_missing_regions_continue_anyway">Continue anyway</string>
+    <string name="simulation_distance_kilometers">%1$s km</string>
+    <string name="simulation_eta_minutes">%1$d min</string>
+    <string name="simulation_eta_hours_minutes">%1$dh %2$dmin</string>
+    <string name="simulation_save_route_button">Save route as favorite</string>
+    <string name="simulation_save_route_title">Save current route</string>
+    <string name="simulation_route_name_label">Route name</string>
+    <string name="simulation_save_route_confirm">Save</string>
+    <string name="simulation_save_route_dismiss">Cancel</string>
+    <string name="simulation_save_route_default_name">My route</string>
+    <string name="simulation_route_saved">Route saved. Find it in Saved → Routes.</string>
 </resources>
 

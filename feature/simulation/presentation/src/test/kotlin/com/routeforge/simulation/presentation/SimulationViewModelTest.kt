@@ -84,6 +84,7 @@ class SimulationViewModelTest {
     private val networkConnectivityChecker = FakeNetworkConnectivityChecker()
     private val lastKnownRealLocationHolder = LastKnownRealLocationHolder()
     private val pendingTeleportTargetHolder = PendingTeleportTargetHolder()
+    private val favoriteRoutesRepository = FakeFavoriteRoutesRepository()
 
     @BeforeEach
     fun setUp() {
@@ -116,6 +117,7 @@ class SimulationViewModelTest {
             lastKnownRealLocationHolder = lastKnownRealLocationHolder,
             pendingTeleportTargetHolder = pendingTeleportTargetHolder,
             observeMapStyle = ObserveMapStyleUseCase(FakeMapStyleStore()),
+            favoriteRoutesRepository = favoriteRoutesRepository,
         )
 
     @Test
@@ -883,5 +885,66 @@ class SimulationViewModelTest {
         viewModel.onAction(SimulationAction.OnPauseSimulation)
 
         assertEquals(1, controller.pauseCallCount)
+    }
+
+    @Test
+    fun `saving the loaded route persists every waypoint without changing playback and emits confirmation`() = runTest {
+        val route = sampleRoute.copy(points = listOf(RoutePoint(10.0, 20.0), RoutePoint(11.0, 21.0), RoutePoint(12.0, 22.0)))
+        lastComputedRouteHolder.set(route)
+        val viewModel = createViewModel()
+        val confirmation = async { viewModel.events.first() }
+        viewModel.onAction(SimulationAction.OnSaveRouteClick)
+        viewModel.onAction(SimulationAction.OnRouteNameInputChange("  Beijing trial  "))
+        viewModel.onAction(SimulationAction.OnConfirmSaveRoute)
+        // A repeated confirmation after the sheet closes must not create a duplicate.
+        viewModel.onAction(SimulationAction.OnConfirmSaveRoute)
+        val saved = favoriteRoutesRepository.observeFavoriteRoutes().value.single()
+        assertEquals("Beijing trial", saved.name)
+        assertEquals(route.points, saved.points)
+        assertEquals(route, lastComputedRouteHolder.route.value)
+        assertEquals(0, controller.pauseCallCount)
+        assertEquals(SimulationEvent.RouteSaved, confirmation.await())
+        assertNull(viewModel.state.value.routeToSave)
+    }
+
+    @Test
+    fun `dismissing save or retaining a route does not add a favorite`() {
+        lastComputedRouteHolder.set(sampleRoute.copy(points = listOf(RoutePoint(10.0, 20.0), RoutePoint(11.0, 21.0))))
+        val viewModel = createViewModel()
+        viewModel.onAction(SimulationAction.OnSaveRouteClick)
+        viewModel.onAction(SimulationAction.OnRouteNameInputChange("Unused"))
+        viewModel.onAction(SimulationAction.OnDismissSaveRoute)
+        viewModel.onAction(SimulationAction.OnCancelRouteClick)
+        viewModel.onAction(SimulationAction.OnDismissCancelRoute)
+        assertTrue(favoriteRoutesRepository.observeFavoriteRoutes().value.isEmpty())
+        assertNull(viewModel.state.value.routeToSave)
+        assertEquals("", viewModel.state.value.routeNameInput)
+    }
+
+    @Test
+    fun `saving requires a loaded route and a nonblank name`() {
+        val viewModel = createViewModel()
+        viewModel.onAction(SimulationAction.OnSaveRouteClick)
+        viewModel.onAction(SimulationAction.OnRouteNameInputChange("No route"))
+        viewModel.onAction(SimulationAction.OnConfirmSaveRoute)
+        assertTrue(favoriteRoutesRepository.observeFavoriteRoutes().value.isEmpty())
+        lastComputedRouteHolder.set(sampleRoute.copy(points = listOf(RoutePoint(10.0, 20.0), RoutePoint(11.0, 21.0))))
+        viewModel.onAction(SimulationAction.OnSaveRouteClick)
+        viewModel.onAction(SimulationAction.OnRouteNameInputChange("  "))
+        viewModel.onAction(SimulationAction.OnConfirmSaveRoute)
+        assertTrue(favoriteRoutesRepository.observeFavoriteRoutes().value.isEmpty())
+        assertNotNull(viewModel.state.value.routeToSave)
+    }
+
+    @Test
+    fun `save sheet retains the route snapshot if the loaded route changes`() = runTest {
+        val route = sampleRoute.copy(points = listOf(RoutePoint(10.0, 20.0), RoutePoint(11.0, 21.0)))
+        lastComputedRouteHolder.set(route)
+        val viewModel = createViewModel()
+        viewModel.onAction(SimulationAction.OnSaveRouteClick)
+        lastComputedRouteHolder.set(route.copy(points = listOf(RoutePoint(30.0, 40.0), RoutePoint(31.0, 41.0))))
+        viewModel.onAction(SimulationAction.OnRouteNameInputChange("Original"))
+        viewModel.onAction(SimulationAction.OnConfirmSaveRoute)
+        assertEquals(route.points, favoriteRoutesRepository.observeFavoriteRoutes().value.single().points)
     }
 }

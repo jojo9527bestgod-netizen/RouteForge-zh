@@ -11,6 +11,7 @@ import com.routeforge.coredomain.model.RoutePoint
 import com.routeforge.coredomain.RoutingEngine
 import com.routeforge.coredomain.model.Region
 import java.io.File
+import android.util.Log
 import btools.router.RoutingEngine as BrouterEngine
 
 class BrouterRoutingEngine(
@@ -92,7 +93,12 @@ class BrouterRoutingEngine(
             }
         val engine = BrouterEngine(null, null, segmentDir, ArrayList(waypoints), routingContext)
         engine.run()
-        return if (engine.getErrorMessage() != null) null else engine.getFoundTrack()
+        val error = engine.getErrorMessage()
+        if (error != null) {
+            Log.w("BrouterRoutingEngine", "Road route computation failed: $error")
+            return null
+        }
+        return engine.getFoundTrack()
     }
 
     private fun toOsmNodeNamed(

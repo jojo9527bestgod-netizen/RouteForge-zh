@@ -13,4 +13,5 @@ sealed interface RouteRequestEvent {
     data object NavigateToRegionCatalog : RouteRequestEvent
 
     data object NavigateToFavorites : RouteRequestEvent
+    data object RouteSaved : RouteRequestEvent
 }

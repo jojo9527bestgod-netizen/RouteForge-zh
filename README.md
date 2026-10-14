@@ -1,47 +1,78 @@
-<p align="center">
-  <img src="docs/logo.svg" width="128" height="128" alt="RouteForge logo">
-</p>
+# RouteForge 中文版
 
-<h1 align="center">RouteForge</h1>
+免费的安卓轨迹模拟工具：在手机地图上选择起点、终点和途经点，生成道路路线，然后调速、暂停、恢复或循环播放模拟位置。
 
-<p align="center">
-  An Android app that simulates device location (mock location / GPS injection) with real
-  road-following routes — computed fully offline, on-device, no server or API key required.
-</p>
+**这是基于 [agvmdsa/RouteForge](https://github.com/agvmdsa/RouteForge) 修改的非官方中文版。** 原项目作者为 Anderson Gabriel，原始代码采用 MIT 许可证。本仓库保留原作者版权和许可证，感谢原作者及 BRouter、OpenStreetMap 等项目的贡献。本分支由 [jojo9527bestgod-netizen](https://github.com/jojo9527bestgod-netizen) 维护，免费提供，无广告、不收费。
 
-## Why
+## 下载
 
-Most "fake GPS" apps on the Play Store connect waypoints with a straight line and ignore basic physical consistency (speed, bearing, accuracy), which makes the simulated position trivially inconsistent with real sensor data. RouteForge aims to do this properly:
+进入 [发布页面](https://github.com/jojo9527bestgod-netizen/RouteForge-zh/releases)，下载 `.apk` 安装包。系统要求为 **Android 8.0 及以上**。
 
-- **Real roads, by choice** — when a route is ready to play, RouteForge checks whether every leg can be driven along real streets. If so, you choose between **Guided** (follows real roads) and **Free-roam** (goes straight through your points, for off-road or unrestricted movement); if not, only Free-roam is offered — never a broken option.
-- **Physically realistic movement** — speed, bearing, and accuracy stay internally consistent.
-- **Guided setup** — a step-by-step flow for the Developer Options ritual Android requires to enable mock location.
-- **Always-on joystick** — free-direction movement is available at any time, including as a deliberate, confirmed interrupt of a route that's currently playing.
-- **Edit a route live, not just before it starts** — reorder, add, move, or delete waypoints while a route is actively playing, not only while planning it; only the portion still ahead of your current position is ever editable mid-run.
-- **Control it without opening the app** — pause, resume, or stop an active simulation straight from its notification, including from the lock screen.
-- **Search for a place, not just tap a map** — look up an address or place name (OpenStreetMap/Nominatim), ranked by relevance and distance to you, then add it as a waypoint, teleport to it, or save it as a favorite.
-- **Favorites, not just one-off routes** — save a single location or a whole planned route by name and reuse it later, without re-tapping every point again.
-- **Offline map data you control** — download only the regions you actually need, with a storage quota you set and manage yourself.
-- **No ads, open source.**
+公开版名称为 **RouteForge 中文版**，包名为 `com.routeforge.zh`，与原版及此前的本地测试版可以同时安装；收藏数据各自独立。需要迁移的路线，可先从测试版导出 JSON，再导入公开版并收藏。
 
-## Basic usage
+## 功能
 
-- **Build a route** — tap the map to add waypoints; use the waypoint list to drag-reorder or delete, tap a waypoint to edit its coordinates, undo any change.
-- **Choose how it plays** — Guided (real roads) and Free-roam (straight lines) are offered based on what's actually computable for your points; pick one to lock it in for that playback session. Before playing, RouteForge checks whether the map data Guided needs is downloaded and offers to fetch it — offline map coverage is computed on demand for anywhere in the world (BRouter's global tile grid), not limited to a fixed list of regions.
-- **Edit mid-run** — reorder, add, move, or delete waypoints on a route that's already playing, from the same shared waypoint list used while planning; the simulation recomputes and keeps going.
-- **Import/export** — load a route from a JSON or GPX file, or export any route you've built back to either format.
-- **Tune playback** — a shared speed selector (0-150 km/h) and an execution mode (once, N times, or loop), both adjustable before and during playback.
-- **Joystick** — drag to move freely in any direction at any time; touching it during an active route asks for confirmation first, then hands off control from where the route was interrupted.
-- **Control from the notification** — pause, resume, or stop the running simulation directly from its persistent notification (works from the lock screen, no need to unlock); tapping the notification itself jumps back into the app on the Simulate screen. A completed route briefly shows its finish before the session ends on its own.
-- **Favorite a location** — save any point you tap while building a route, then teleport straight to it later (with confirmation) from the star button on the Plan Route screen.
-- **Favorite a whole route** — once you've placed two or more waypoints, save the set as a named favorite route — before you've even computed or played it. Reopen it later from the Saved tab, which computes it and loads it straight onto the Simulate screen.
-- **Manage offline regions** — the Settings tab shows how much space downloaded map data is using, lets you set a storage quota, and the region catalog lets you download or delete coverage for specific areas.
-- **Search** — tap the magnifying-glass icon in the bottom bar from any tab to look up an address or place. From Plan Route, picking a result adds it as a waypoint; from anywhere else, you're offered to teleport to it or save it as a favorite.
+- 在地图上依次添加起点、途经点和终点。
+- 使用 BRouter 在手机本地计算道路路线，生成路线默认沿道路。
+- 道路计算失败时显示错误，规划页面不会自动使用直线代替。
+- 支持调速、暂停、恢复，以及单次、指定次数、循环和往返播放。
+- 支持 JSON / GPX 导入导出，路线及地点收藏。
+- 提供简体中文界面，以及能显示中文地名的备用道路地图。
+- 首次下载路网需要联网，完成后可在该路网范围内离线计算路线；地图和地点搜索仍可能需要网络。
 
-## Status
+## 手机使用
 
-Early stage — actively being designed and built. Not yet on the Play Store.
+1. 安装 APK，按应用引导授予定位和通知权限。
+2. 在“开发者选项 → 选择模拟位置信息应用”中选择 **RouteForge 中文版**。各手机的设置名称可能略有不同。
+3. 打开“规划路线”，在地图上依次添加起点、途经点、终点，至少两个点。
+4. 点击“生成路线”。首次使用该地区时，按提示下载路网，下载完成后再生成路线。
+5. 确认标题显示“沿道路模式”、路线随道路转弯，然后点击“使用此路线”。
+6. 在“模拟”页面设置速度和播放方式，开始播放。手机将持续提供模拟位置。
+7. 若需以后再使用，点击“收藏路线”，确认名称后保存，到 **收藏 → 路线** 查看。
+8. 结束后停止模拟；暂时不用时，可把开发者选项中的模拟位置信息应用改为“无”。
 
-## License
+取消路线弹窗里的 **“不取消”只会关闭弹窗**，不会收藏。收藏保存起终点和途经点列表，再次使用时重新计算路线。出现模式选择时，车辆道路测试请选择“沿道路行驶”。
 
-MIT — see [LICENSE](LICENSE).
+## 与导航软件配合
+
+本应用提供安卓模拟位置，导航软件根据接收到的位置正常导航。两边各自计算路线，请设置相同的起终点和必要途经点，并核对道路。
+
+建议先用熟悉的短路线和 30 km/h 验证，每次只测试一个导航软件。高德、百度、腾讯的兼容性取决于手机、应用版本和模拟位置识别方式，**目前未完成逐一兼容性验收**。
+
+本应用使用 WGS84 坐标。导入高德 GCJ-02、百度 BD-09 数据前，请先正确转换，避免偏移。开放路线循环回到起点可能产生跳变，循环测试优先使用首尾相接的路线。
+
+## 本分支改动
+
+- 简体中文翻译，明确区分生成路线、直线模式、沿道路模式和收藏操作。
+- 规划页面默认沿道路，道路计算失败不会静默回退为直线。
+- 路网先下载到临时文件，验证长度和 BRouter 完整性后再提交，识别旧的截断文件。
+- 增加 OSM France HOT 备用地图、可见地图署名和本分支的请求标识。
+- 在路线就绪弹窗和模拟页面增加收藏入口，保存成功后提示查看位置。
+- 修复跨模块测试辅助类依赖及部分上游测试准备条件。
+- 公开版使用独立包名，APK 内包含开源许可证与致谢。
+
+详细更新见 [CHANGELOG.md](CHANGELOG.md)，构建说明见 [docs/BUILDING.md](docs/BUILDING.md)。原项目说明保留在 [docs/README.upstream.md](docs/README.upstream.md)。
+
+## 验证与限制
+
+道路规划、收藏、重启后的收藏保留和部分回放控制已在 OPPO Android 15 上验证。每个公开版本的具体结果以发布说明为准。
+
+完整循环、导航切换后的后台回放、通知控制和三款导航软件兼容性仍需要进一步验证。本工具不能替代真实车辆的惯性传感器、隧道定位或车机融合定位测试。
+
+手机开启模拟定位期间，其他应用收到的位置可能改变。请在需要测试时开启，在测试结束后停止。
+
+## 地图、搜索与隐私
+
+OSM France 地图服务要求免费、非营利及流量适量。本仓库免费发布；地图服务的持续可用性由提供方决定。请勿使用公共地图、搜索服务做批量抓取、压测或大范围离线下载。使用规模增大时，需要更换合适的服务或自行部署。
+
+路线和收藏保存在手机本地，本分支没有新增自建服务器、广告或统计 SDK。地图、地点搜索和路网下载会访问第三方服务，具体数据流与服务条件见 [PRIVACY.md](PRIVACY.md)。
+
+## 反馈
+
+通过本仓库 [Issues](https://github.com/jojo9527bestgod-netizen/RouteForge-zh/issues) 反馈，说明手机型号、安卓版本、应用版本和复现步骤。分享日志或路线前，请移除私人地点及其他敏感信息。
+
+## 许可证与致谢
+
+原项目及本分支代码采用 [MIT 许可证](LICENSE)，原版权声明保持不变。本分支改动另有说明，不代表原作者的官方发布。
+
+第三方组件保留各自的许可证，说明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 和 [licenses/](licenses/)，也可以在应用“设置 → 开源许可与致谢”查看。地图数据及在线服务适用各自的许可和使用条件。

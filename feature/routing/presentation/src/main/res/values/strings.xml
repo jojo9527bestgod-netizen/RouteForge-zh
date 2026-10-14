@@ -1,7 +1,7 @@
 <resources>
     <string name="routing_undo_button">Undo</string>
     <string name="routing_import_button">Import route</string>
-    <string name="routing_proceed_button">Proceed to play</string>
+    <string name="routing_proceed_button">Generate route</string>
     <string name="routing_choose_mode_label">Choose how to play this route</string>
     <string name="routing_mode_guided_button">Guided (follow roads)</string>
     <string name="routing_mode_free_roam_button">Free-roam (straight line)</string>
@@ -26,13 +26,16 @@
     <string name="routing_missing_regions_message">Guided routing needs about %1$d MB more map data for: %2$s</string>
     <string name="routing_missing_regions_uncovered_note">%1$d waypoint(s) have no map data available at all — Guided won\'t be possible there even after downloading.</string>
     <string name="routing_missing_regions_go_to_downloads">Go to downloads</string>
-    <string name="routing_missing_regions_continue_anyway">Continue anyway</string>
+    <string name="routing_missing_regions_continue_anyway">Use straight-line mode instead</string>
     <string name="region_catalog_needed_label">Needed for your current route</string>
     <string name="region_catalog_download_button">Download</string>
     <string name="region_catalog_status_downloaded">Downloaded</string>
     <string name="region_catalog_status_downloading">Downloading…</string>
     <string name="region_catalog_status_partially_downloaded">Partially downloaded</string>
     <string name="region_catalog_status_not_downloaded">Not downloaded</string>
+    <string name="region_catalog_download_failed">Download failed. Check your connection and try again.</string>
+    <string name="region_catalog_size">%1$d MB</string>
+    <string name="region_catalog_partial_size">%1$d MB missing of %2$d MB</string>
     <string name="region_catalog_attribution">© OpenStreetMap contributors</string>
     <string name="region_catalog_empty_title">No map data needed right now</string>
     <string name="region_catalog_empty_message">Regions show up here once your route needs them, or once you\'ve downloaded them for offline use.</string>
@@ -64,6 +67,7 @@
     <string name="settings_manage_downloads_button">Manage downloads</string>
     <string name="settings_map_style_section_title">Map style</string>
     <string name="settings_map_style_standard">Standard</string>
+    <string name="settings_map_style_osm_fr">Roads (OSM France)</string>
     <string name="settings_map_style_topographic">Topographic</string>
     <string name="routing_add_waypoint_title">Add this waypoint?</string>
     <string name="routing_add_waypoint_message">Latitude: %1$s\nLongitude: %2$s</string>
@@ -73,6 +77,8 @@
     <string name="routing_save_as_favorite_label">Also save as favorite</string>
     <string name="routing_favorite_name_label">Favorite name</string>
     <string name="routing_save_route_button">Save route as favorite</string>
+    <string name="routing_save_route_default_name">My route</string>
+    <string name="routing_route_saved">Route saved. Find it in Saved → Routes.</string>
     <string name="routing_save_route_title">Save this route?</string>
     <string name="routing_route_name_label">Route name</string>
     <string name="routing_save_route_confirm_button">Save</string>
@@ -114,5 +120,11 @@
     <string name="routing_mode_name_free_roam">Free-roam</string>
     <string name="routing_waypoints_updated_message">Waypoints updated</string>
     <string name="routing_switch_route_mode_button">Preview other mode</string>
-    <string name="routing_error_mode_preview_no_path">No viable path found for that mode.</string>
+    <string name="routing_error_mode_preview_no_path">No road route found. Place the points on drivable roads, or delete and download the region again if its data is incomplete.</string>
+    <string name="routing_switch_to_guided">Switch to road-following mode</string>
+    <string name="routing_switch_to_free_roam">Switch to straight-line mode</string>
+    <string name="routing_preview_guided">Preview road route</string>
+    <string name="settings_open_source_button">Open source licenses and acknowledgements</string>
+    <string name="settings_open_source_title">Open source licenses</string>
+    <string name="settings_open_source_close">Close</string>
 </resources>

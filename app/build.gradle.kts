@@ -7,6 +7,11 @@ plugins {
 
 android {
     namespace = "com.routeforge.app"
+    defaultConfig {
+        applicationId = "com.routeforge.zh"
+        versionCode = 5
+        versionName = "1.2.1-zh"
+    }
 }
 
 dependencies {

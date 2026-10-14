@@ -42,6 +42,14 @@ sealed interface SimulationAction {
 
     data object OnDismissCancelRoute : SimulationAction
 
+    data object OnSaveRouteClick : SimulationAction
+
+    data class OnRouteNameInputChange(val value: String) : SimulationAction
+
+    data object OnConfirmSaveRoute : SimulationAction
+
+    data object OnDismissSaveRoute : SimulationAction
+
     data class OnJoystickDrag(
         val bearingDegrees: Float,
     ) : SimulationAction

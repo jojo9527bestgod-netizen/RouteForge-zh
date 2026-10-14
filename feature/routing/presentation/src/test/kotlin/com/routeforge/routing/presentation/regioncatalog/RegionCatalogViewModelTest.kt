@@ -119,6 +119,7 @@ class RegionCatalogViewModelTest {
     @Test
     fun `starting a download delegates to the controller with the resolved region`() {
         val catalog = FakeRegionCatalog(regions = listOf(downloadableRegion))
+        draftWaypointsHolder.set(listOf(RoutePoint(latitude = 0.5, longitude = 0.5)))
         val viewModel = createViewModel(catalog)
 
         viewModel.onAction(RegionCatalogAction.OnDownloadRegion(downloadableRegion.id))
@@ -129,6 +130,7 @@ class RegionCatalogViewModelTest {
     @Test
     fun `a second start while one is already active is a no-op, via the controller's own guard`() {
         val catalog = FakeRegionCatalog(regions = listOf(downloadableRegion, otherRegion))
+        draftWaypointsHolder.set(listOf(RoutePoint(latitude = 0.5, longitude = 0.5)))
         val viewModel = createViewModel(catalog)
 
         viewModel.onAction(RegionCatalogAction.OnDownloadRegion(downloadableRegion.id))

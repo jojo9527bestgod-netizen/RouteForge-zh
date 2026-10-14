@@ -29,6 +29,8 @@ data class SimulationState(
     val isPendingTeleportBlockedOffline: Boolean = false,
     val isPendingCancelMock: Boolean = false,
     val loadedRoute: Route? = null,
+    val routeToSave: Route? = null,
+    val routeNameInput: String = "",
     val playbackSpeedKmh: Float = SpeedPresetType.CAR.kilometersPerHour.toFloat(),
     val executionModeSelection: ExecutionModeSelection = ExecutionModeSelection.ONCE,
     val executionTimesInput: String = "2",

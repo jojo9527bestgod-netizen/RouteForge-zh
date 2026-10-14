@@ -13,6 +13,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
             extensions.configure<ApplicationExtension> {
                 compileSdk = libs.intVersion("androidCompileSdk")
+                compileSdkMinor = 0
 
                 defaultConfig {
                     applicationId = "com.routeforge.app"

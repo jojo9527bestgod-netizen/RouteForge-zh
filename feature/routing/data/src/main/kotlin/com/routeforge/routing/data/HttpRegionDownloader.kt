@@ -1,6 +1,7 @@
 package com.routeforge.routing.data
 
 import android.util.Log
+import btools.mapaccess.PhysicalFile
 import com.routeforge.coredata.toNetworkError
 import com.routeforge.coredomain.DataError
 import com.routeforge.coredomain.EmptyResult
@@ -9,17 +10,22 @@ import com.routeforge.routing.domain.RegionDownloader
 import com.routeforge.coredomain.model.Region
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpRequestTimeoutException
+import io.ktor.client.plugins.HttpTimeoutConfig
 import io.ktor.client.plugins.onDownload
+import io.ktor.client.plugins.timeout
 import io.ktor.client.request.prepareGet
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.isSuccess
+import io.ktor.http.contentLength
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.readAvailable
 import kotlinx.coroutines.CancellationException
 import java.io.File
 import java.io.IOException
 import java.net.UnknownHostException
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 private const val TAG = "HttpRegionDownloader"
 private const val SEGMENT_BASE_URL = "https://brouter.de/brouter/segments4/"
@@ -28,6 +34,7 @@ private const val DOWNLOAD_BUFFER_SIZE_BYTES = 8 * 1024
 class HttpRegionDownloader(
     private val httpClient: HttpClient,
     private val regionCatalog: BundledRegionCatalog,
+    private val checkIntegrity: (File) -> String? = PhysicalFile::checkFileIntegrity,
 ) : RegionDownloader {
     override suspend fun download(
         region: Region,
@@ -64,10 +71,17 @@ class HttpRegionDownloader(
         segmentDirectory: File,
         tileId: String,
         onTileProgress: (Float?) -> Unit,
-    ): EmptyResult<DataError.Network> =
-        try {
+    ): EmptyResult<DataError.Network> {
+        val destination = File(segmentDirectory, tileId)
+        val partial = File(segmentDirectory, "$tileId.part")
+        return try {
             httpClient
                 .prepareGet(SEGMENT_BASE_URL + tileId) {
+                    timeout {
+                        requestTimeoutMillis = HttpTimeoutConfig.INFINITE_TIMEOUT_MS
+                        connectTimeoutMillis = 20_000L
+                        socketTimeoutMillis = 30_000L
+                    }
                     onDownload { bytesSentTotal, contentLength ->
                         if (contentLength != null && contentLength > 0) {
                             onTileProgress(bytesSentTotal.toFloat() / contentLength)
@@ -77,7 +91,14 @@ class HttpRegionDownloader(
                     }
                 }.execute { response: HttpResponse ->
                     if (response.status.isSuccess()) {
-                        writeChannelToFile(response.bodyAsChannel(), File(segmentDirectory, tileId))
+                        writeChannelToFile(response.bodyAsChannel(), partial)
+                        val expectedBytes = response.contentLength()
+                        if (expectedBytes != null && partial.length() != expectedBytes) {
+                            throw IOException("Incomplete road segment download")
+                        }
+                        val integrityError = checkIntegrity(partial)
+                        if (integrityError != null) throw IOException("Invalid road segment: $integrityError")
+                        Files.move(partial.toPath(), destination.toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
                         Result.Success(Unit)
                     } else {
                         Result.Error(response.status.toNetworkError())
@@ -103,7 +124,10 @@ class HttpRegionDownloader(
         } catch (e: Exception) {
             Log.w(TAG, "Unexpected tile download failure", e)
             Result.Error(DataError.Network.UNKNOWN)
+        } finally {
+            partial.delete()
         }
+    }
 
     /** Streams the response directly to disk in fixed-size chunks instead of materializing the
      *  whole tile in memory first — segment files can be large enough that reading one fully

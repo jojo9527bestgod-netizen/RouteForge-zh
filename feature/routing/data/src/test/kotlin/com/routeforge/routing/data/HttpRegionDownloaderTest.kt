@@ -13,6 +13,7 @@ import io.ktor.http.headersOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.ByteArrayInputStream
@@ -53,7 +54,7 @@ class HttpRegionDownloaderTest {
                 )
             }
         val regionCatalog = BundledRegionCatalog(segmentDir, profileDir, ::emptyAssetOpener)
-        val downloader = HttpRegionDownloader(HttpClient(mockEngine), regionCatalog)
+        val downloader = HttpRegionDownloader(HttpClient(mockEngine), regionCatalog, checkIntegrity = { null })
         val progressValues = mutableListOf<Float?>()
 
         val result = downloader.download(testRegion) { progressValues.add(it) }
@@ -71,7 +72,7 @@ class HttpRegionDownloaderTest {
         val tileBytes = byteArrayOf(1, 2, 3, 4, 5)
         val mockEngine = MockEngine { respond(content = tileBytes, status = HttpStatusCode.OK) }
         val regionCatalog = BundledRegionCatalog(segmentDir, profileDir, ::emptyAssetOpener)
-        val downloader = HttpRegionDownloader(HttpClient(mockEngine), regionCatalog)
+        val downloader = HttpRegionDownloader(HttpClient(mockEngine), regionCatalog, checkIntegrity = { null })
         val progressValues = mutableListOf<Float?>()
 
         downloader.download(testRegion) { progressValues.add(it) }
@@ -91,5 +92,39 @@ class HttpRegionDownloaderTest {
         val result = downloader.download(testRegion) {}
 
         assertEquals(Result.Error(DataError.Network.NOT_FOUND), result)
+    }
+
+    @Test
+    fun `short responses preserve an existing tile and remove the partial download`(
+        @TempDir segmentDir: File,
+        @TempDir profileDir: File,
+    ) = runTest {
+        val original = byteArrayOf(9, 8, 7)
+        File(segmentDir, "tile.rd5").writeBytes(original)
+        val mockEngine = MockEngine {
+            respond(byteArrayOf(1, 2), HttpStatusCode.OK, headersOf(HttpHeaders.ContentLength, "20"))
+        }
+        val catalog = BundledRegionCatalog(segmentDir, profileDir, ::emptyAssetOpener)
+        val downloader = HttpRegionDownloader(HttpClient(mockEngine), catalog, checkIntegrity = { null })
+
+        assertEquals(Result.Error(DataError.Network.UNKNOWN), downloader.download(testRegion) {})
+        assertArrayEquals(original, File(segmentDir, "tile.rd5").readBytes())
+        assertFalse(File(segmentDir, "tile.rd5.part").exists())
+    }
+
+    @Test
+    fun `a complete HTTP response is rejected when the road segment fails integrity checking`(
+        @TempDir segmentDir: File,
+        @TempDir profileDir: File,
+    ) = runTest {
+        val mockEngine = MockEngine {
+            respond(byteArrayOf(1, 2), HttpStatusCode.OK, headersOf(HttpHeaders.ContentLength, "2"))
+        }
+        val catalog = BundledRegionCatalog(segmentDir, profileDir, ::emptyAssetOpener)
+        val downloader = HttpRegionDownloader(HttpClient(mockEngine), catalog, checkIntegrity = { "checksum mismatch" })
+
+        assertEquals(Result.Error(DataError.Network.UNKNOWN), downloader.download(testRegion) {})
+        assertFalse(File(segmentDir, "tile.rd5").exists())
+        assertFalse(File(segmentDir, "tile.rd5.part").exists())
     }
 }

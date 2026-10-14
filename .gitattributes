@@ -1,0 +1,16 @@
+* text=auto
+*.kt text eol=lf
+*.kts text eol=lf
+*.xml text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+NOTICE text eol=lf
+LICENSE text eol=lf
+gradlew text eol=lf
+gradlew.bat text eol=crlf
+*.jar binary
+*.apk binary
+
+# 第三方许可保持原始正文和空白，不做代码格式检查。
+licenses/** text eol=lf -whitespace
+app/src/main/assets/OPEN_SOURCE_NOTICES.txt text eol=lf -whitespace

@@ -1,0 +1,5 @@
+<resources>
+    <string name="map_attribution_osm_fr">© OpenStreetMap contributors · HOT · OSM France</string>
+    <string name="map_attribution_standard">© OpenStreetMap contributors</string>
+    <string name="map_attribution_topographic">© OpenStreetMap · SRTM · OpenTopoMap (CC-BY-SA)</string>
+</resources>

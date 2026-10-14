@@ -7,8 +7,13 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.drawable.BitmapDrawable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -16,23 +21,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.routeforge.coredomain.model.LatLng
 import com.routeforge.coredomain.model.MapStyle
+import com.routeforge.designsystem.R
 import com.routeforge.designsystem.theme.MapColors
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.ITileSource
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
@@ -54,8 +65,18 @@ private val MarkerDotSize = 20.dp
 private val MarkerBadgeSize = 28.dp
 private val MarkerArrowSize = 32.dp
 
+// Free, non-profit mobile apps with moderate traffic and attribution are permitted:
+// https://www.openstreetmap.fr/usage/ . This is a separate cache namespace from Mapnik.
+private val OsmFranceTileSource =
+    XYTileSource(
+        "RouteForge-OSM-France-HOT", 1, 19, 256, ".png",
+        arrayOf("https://a.tile.openstreetmap.fr/hot/"),
+        "© OpenStreetMap contributors · HOT · OSM France",
+    )
+
 private fun MapStyle.toTileSource(): ITileSource =
     when (this) {
+        MapStyle.OSM_FR -> OsmFranceTileSource
         MapStyle.STANDARD -> TileSourceFactory.MAPNIK
         MapStyle.TOPOGRAPHIC -> TileSourceFactory.OpenTopo
     }
@@ -169,7 +190,7 @@ private fun buildMapComponents(
 ): RouteForgeMapComponents {
     Configuration.getInstance().apply {
         load(context, context.getSharedPreferences(OSMDROID_PREFS_NAME, Context.MODE_PRIVATE))
-        userAgentValue = context.packageName
+        userAgentValue = "RouteForge-zh/1.2.1-zh (${context.packageName}; https://github.com/jojo9527bestgod-netizen/RouteForge-zh)"
     }
     val mapView =
         MapView(context).apply {
@@ -374,5 +395,24 @@ fun RouteForgeMap(
         components.mapView.controller.setCenter(GeoPoint(target.latitude, target.longitude))
     }
 
-    AndroidView(factory = { components.mapView }, modifier = modifier.fillMaxSize())
+    val uriHandler = LocalUriHandler.current
+    val attributionResource =
+        when (mapStyle) {
+            MapStyle.OSM_FR -> R.string.map_attribution_osm_fr
+            MapStyle.STANDARD -> R.string.map_attribution_standard
+            MapStyle.TOPOGRAPHIC -> R.string.map_attribution_topographic
+        }
+    Box(modifier = modifier.fillMaxSize()) {
+        AndroidView(factory = { components.mapView }, modifier = Modifier.fillMaxSize())
+        Text(
+            text = stringResource(attributionResource),
+            fontSize = 10.sp,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier =
+                Modifier.align(Alignment.BottomEnd)
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f))
+                    .clickable { uriHandler.openUri("https://www.openstreetmap.org/copyright") }
+                    .padding(horizontal = 4.dp, vertical = 2.dp),
+        )
+    }
 }

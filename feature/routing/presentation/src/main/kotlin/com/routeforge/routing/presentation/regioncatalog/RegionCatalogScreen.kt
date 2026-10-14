@@ -65,17 +65,17 @@ fun RegionCatalogRoot(
     onOpenCoverageMap: () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    var downloadErrorMessage by remember { mutableStateOf<String?>(null) }
+    var downloadFailed by remember { mutableStateOf(false) }
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
-            when (event) { is RegionCatalogEvent.DownloadFailed -> downloadErrorMessage = event.message }
+            when (event) { is RegionCatalogEvent.DownloadFailed -> downloadFailed = true }
         }
     }
     RegionCatalogScreen(
         state = state,
         onAction = viewModel::onAction,
         onOpenCoverageMap = onOpenCoverageMap,
-        downloadErrorMessage = downloadErrorMessage,
+        downloadErrorMessage = if (downloadFailed) stringResource(R.string.region_catalog_download_failed) else null,
     )
 }
 
@@ -298,11 +298,12 @@ private fun RegionCard(
     }
 }
 
+@Composable
 private fun Region.sizeDisplayText(): String =
     if (status == RegionStatus.PARTIALLY_DOWNLOADED) {
-        "${estimatedMissingBytes / 1_000_000} MB missing of ${approximateSizeBytes / 1_000_000} MB"
+        stringResource(R.string.region_catalog_partial_size, estimatedMissingBytes / 1_000_000, approximateSizeBytes / 1_000_000)
     } else {
-        "${approximateSizeBytes / 1_000_000} MB"
+        stringResource(R.string.region_catalog_size, approximateSizeBytes / 1_000_000)
     }
 
 @Composable

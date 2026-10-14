@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">RouteForge 中文版</string>
+    <string name="tab_simulate_label">模拟</string>
+    <string name="tab_plan_route_label">规划路线</string>
+    <string name="tab_search_label">搜索</string>
+    <string name="tab_saved_label">收藏</string>
+    <string name="tab_settings_label">设置</string>
+</resources>

@@ -17,6 +17,7 @@ import com.routeforge.routing.presentation.FakeFavoriteRoutesRepository
 import com.routeforge.routing.presentation.FakeRegionCatalog
 import com.routeforge.routing.presentation.FakeRegionUsageTracker
 import com.routeforge.routing.presentation.FakeRoutingEngine
+import com.routeforge.routing.domain.usecase.ExportRouteFileUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -55,6 +56,7 @@ class SavedRoutesViewModelTest {
         SavedRoutesViewModel(
             favoriteRoutesRepository = favoriteRoutesRepository,
             lastComputedRouteHolder = lastComputedRouteHolder,
+            exportRouteFile = ExportRouteFileUseCase(emptyMap()),
             computeRequiredRegions = ComputeRequiredRegionsUseCase(regionCatalog),
             prepareRouteOptions =
                 PrepareRouteOptionsUseCase(

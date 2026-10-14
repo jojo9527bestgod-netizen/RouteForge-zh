@@ -1,0 +1,12 @@
+RouteForge 中文版：免费的非官方分支。
+
+上游：https://github.com/agvmdsa/RouteForge
+原项目 Copyright (c) 2026 Anderson Gabriel，MIT License。
+本分支改动 Copyright (c) 2026 jojo9527bestgod-netizen，同样按 MIT 提供。
+本分支并非原作者的官方发行版本。
+
+BRouter Copyright (c) 2019 BRouter contributors，MIT License。
+其他依赖库的版权及许可见 THIRD_PARTY_NOTICES.md 和 licenses/。
+OpenStreetMap 地图数据 © OpenStreetMap contributors，适用其数据许可和署名要求。
+
+原始许可证保持原文；原作者和各第三方组件的权利继续保留。

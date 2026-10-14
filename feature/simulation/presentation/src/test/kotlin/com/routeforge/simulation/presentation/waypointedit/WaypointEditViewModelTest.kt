@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -207,6 +208,8 @@ class WaypointEditViewModelTest {
             val job = launch { viewModel.events.collect { events.add(it) } }
 
             viewModel.onAction(WaypointEditAction.OnGoToDownloads)
+
+            runCurrent()
 
             assertTrue(events.contains(WaypointEditEvent.GoToDownloads))
             assertTrue(events.contains(WaypointEditEvent.AutoPauseRequested))

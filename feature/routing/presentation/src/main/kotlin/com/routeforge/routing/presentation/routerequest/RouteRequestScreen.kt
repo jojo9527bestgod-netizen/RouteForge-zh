@@ -1,6 +1,7 @@
 package com.routeforge.routing.presentation.routerequest
 
 import android.content.Context
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -96,6 +97,7 @@ fun RouteRequestRoot(
                 RouteRequestEvent.GoToSimulate -> onGoToSimulate()
                 RouteRequestEvent.NavigateToRegionCatalog -> onOpenRegionCatalog()
                 RouteRequestEvent.NavigateToFavorites -> onOpenFavorites()
+                RouteRequestEvent.RouteSaved -> Toast.makeText(context, R.string.routing_route_saved, Toast.LENGTH_LONG).show()
                 is RouteRequestEvent.ExportReady -> {
                     pendingExportBytes = event.bytes
                     when (event.format) {
@@ -314,6 +316,7 @@ private fun BoxScope.RouteRequestTrailingFabs(
     state: RouteRequestState,
     onAction: (RouteRequestAction) -> Unit,
 ) {
+    val suggestedName = stringResource(R.string.routing_save_route_default_name)
     FabColumn(alignment = Alignment.BottomEnd) {
         if (state.draft.points.size >= MIN_WAYPOINTS_TO_PLAY) {
             if (state.route == null) {
@@ -323,7 +326,7 @@ private fun BoxScope.RouteRequestTrailingFabs(
                     } else {
                         Icon(
                             imageVector = if (state.previewMode == RoutePlaybackMode.GUIDED) Icons.Filled.Straighten else Icons.Filled.Signpost,
-                            contentDescription = stringResource(R.string.routing_switch_route_mode_button),
+                            contentDescription = stringResource(if (state.previewMode == RoutePlaybackMode.GUIDED) R.string.routing_switch_to_free_roam else R.string.routing_preview_guided),
                         )
                     }
                 }
@@ -337,7 +340,10 @@ private fun BoxScope.RouteRequestTrailingFabs(
                     Icon(Icons.Filled.PlayArrow, contentDescription = stringResource(R.string.routing_proceed_button))
                 }
             }
-            FloatingActionButton(onClick = { onAction(RouteRequestAction.OnSaveRouteClick) }) {
+            FloatingActionButton(onClick = {
+                onAction(RouteRequestAction.OnRouteNameInputChange(suggestedName))
+                onAction(RouteRequestAction.OnSaveRouteClick)
+            }) {
                 Icon(Icons.Filled.Bookmark, contentDescription = stringResource(R.string.routing_save_route_button))
             }
         }
@@ -351,9 +357,10 @@ private fun RouteRequestDialogs(
     state: RouteRequestState,
     onAction: (RouteRequestAction) -> Unit,
 ) {
+    val suggestedName = stringResource(R.string.routing_save_route_default_name)
     state.route?.let { route ->
         var isDismissed by remember(route) { mutableStateOf(false) }
-        if (!isDismissed) {
+        if (!isDismissed && !state.isSaveRouteSheetOpen) {
             RouteReadySheet(
                 route = route,
                 chosenMode = state.chosenMode,
@@ -362,6 +369,10 @@ private fun RouteRequestDialogs(
                 onUseRoute = {
                     isDismissed = true
                     onAction(RouteRequestAction.OnUseRoute)
+                },
+                onSaveRoute = {
+                    onAction(RouteRequestAction.OnRouteNameInputChange(suggestedName))
+                    onAction(RouteRequestAction.OnSaveRouteClick)
                 },
                 onSwitchMode = { onAction(RouteRequestAction.OnSwitchRouteModeClick) },
                 onDismiss = { isDismissed = true },

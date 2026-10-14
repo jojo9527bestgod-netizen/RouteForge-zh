@@ -1,0 +1,14 @@
+<resources>
+    <string name="simulation_notification_channel_name">位置模拟</string>
+    <string name="simulation_notification_title">RouteForge 正在模拟位置</string>
+    <string name="simulation_notification_text_stationary">正在提供固定的模拟位置。</string>
+    <string name="simulation_notification_text_route_paused">路线模拟已暂停。</string>
+    <string name="simulation_notification_text_route_complete">路线模拟已完成。</string>
+    <string name="simulation_notification_text_route_running">正在沿路线模拟行驶。</string>
+    <string name="simulation_notification_action_pause">暂停</string>
+    <string name="simulation_notification_action_resume">继续</string>
+    <string name="simulation_notification_action_stop">停止</string>
+    <string name="simulation_notification_channel_name_alerts">模拟定位提示</string>
+    <string name="simulation_notification_authorization_lost_title">模拟定位已停止</string>
+    <string name="simulation_notification_authorization_lost_text">RouteForge 已不再是所选的模拟位置信息应用，模拟已停止。</string>
+</resources>

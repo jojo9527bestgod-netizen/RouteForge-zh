@@ -115,7 +115,7 @@ class BundledRegionCatalog(
         )
     }
 
-    private fun missingTileCount(tileFileNames: List<String>): Int = tileFileNames.count { !File(segmentDirectory, it).exists() }
+    private fun missingTileCount(tileFileNames: List<String>): Int = tileFileNames.count { !hasCompleteSegmentHeader(File(segmentDirectory, it)) }
 
     private fun statusFor(
         id: String,
