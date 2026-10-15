@@ -190,7 +190,7 @@ private fun buildMapComponents(
 ): RouteForgeMapComponents {
     Configuration.getInstance().apply {
         load(context, context.getSharedPreferences(OSMDROID_PREFS_NAME, Context.MODE_PRIVATE))
-        userAgentValue = "RouteForge-zh/1.2.1-zh (${context.packageName}; https://github.com/jojo9527bestgod-netizen/RouteForge-zh)"
+        userAgentValue = "RouteForge-zh/1.2.2-zh (${context.packageName}; https://github.com/jojo9527bestgod-netizen/RouteForge-zh)"
     }
     val mapView =
         MapView(context).apply {

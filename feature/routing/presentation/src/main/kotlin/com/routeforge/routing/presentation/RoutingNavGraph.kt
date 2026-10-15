@@ -1,6 +1,7 @@
 package com.routeforge.routing.presentation
 
 import androidx.navigation.NavController
+import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
@@ -67,9 +68,9 @@ fun NavGraphBuilder.savedGraph(
 }
 
 /** The Settings tab's own nested graph. */
-fun NavGraphBuilder.settingsGraph(navController: NavController) {
+fun NavGraphBuilder.settingsGraph(navController: NavController, additionalSettings: @Composable () -> Unit = {}) {
     composable<SettingsRoute> {
-        SettingsRoot(onManageDownloadsClick = { navController.navigate(RegionCatalogRoute) })
+        SettingsRoot(onManageDownloadsClick = { navController.navigate(RegionCatalogRoute) }, additionalSettings = additionalSettings)
     }
     regionCatalogGraph(navController)
 }

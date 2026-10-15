@@ -10,7 +10,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-private const val USER_AGENT = "RouteForge-zh/1.2.1-zh (+https://github.com/jojo9527bestgod-netizen/RouteForge-zh)"
+private const val USER_AGENT = "RouteForge-zh/1.2.2-zh (+https://github.com/jojo9527bestgod-netizen/RouteForge-zh)"
 private const val REQUEST_TIMEOUT_MILLIS = 20_000L
 
 private val JsonConfig = Json { ignoreUnknownKeys = true }

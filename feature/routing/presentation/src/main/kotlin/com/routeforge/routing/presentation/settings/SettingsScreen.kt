@@ -68,9 +68,10 @@ private val MapStyleOptions: List<Pair<MapStyle, Int>> =
 fun SettingsRoot(
     onManageDownloadsClick: () -> Unit,
     viewModel: SettingsViewModel = koinViewModel(),
+    additionalSettings: @Composable () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    SettingsScreen(state = state, onAction = viewModel::onAction, onManageDownloadsClick = onManageDownloadsClick)
+    SettingsScreen(state = state, onAction = viewModel::onAction, onManageDownloadsClick = onManageDownloadsClick, additionalSettings = additionalSettings)
 }
 
 @Composable
@@ -78,6 +79,7 @@ fun SettingsScreen(
     state: SettingsState,
     onAction: (SettingsAction) -> Unit,
     onManageDownloadsClick: () -> Unit = {},
+    additionalSettings: @Composable () -> Unit = {},
 ) {
     var showLicenses by remember { mutableStateOf(false) }
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { paddingValues ->
@@ -95,6 +97,7 @@ fun SettingsScreen(
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
+            additionalSettings()
             StorageQuotaSection(
                 quotaBytes = state.quotaBytes,
                 usedBytes = state.usedBytes,

@@ -5,4 +5,10 @@
     <string name="tab_search_label">搜索</string>
     <string name="tab_saved_label">收藏</string>
     <string name="tab_settings_label">设置</string>
+    <string name="floating_controls_title">悬浮模拟控制</string>
+    <string name="floating_controls_description">模拟时，在导航软件上显示暂停、继续和停止按钮。拖动 ↕ 调整位置，停止模拟后自动消失。</string>
+    <string name="floating_controls_permission_granted">显示在其他应用上层：已授权</string>
+    <string name="floating_controls_permission_missing">显示在其他应用上层：待授权</string>
+    <string name="floating_controls_manage_permission">管理悬浮窗权限</string>
+    <string name="floating_controls_settings_unavailable">请到系统设置 → 应用 → 特殊应用权限 → 显示在其他应用上层，允许 RouteForge 中文版。</string>
 </resources>

@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.content.res.Configuration
 import android.content.pm.ServiceInfo
 import android.graphics.drawable.Icon
 import android.os.Build
@@ -18,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 
@@ -42,10 +44,12 @@ private const val CONTENT_REQUEST_CODE = 4
 class SimulationForegroundService : Service() {
     private val simulationController: SimulationController by inject()
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private lateinit var floatingControls: SimulationFloatingControls
 
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        floatingControls = SimulationFloatingControls(this, simulationController::pause, simulationController::resume, simulationController::stop)
         val initialSession = simulationController.mockedSession.value
         startInForeground(
             if (initialSession != null) {
@@ -56,7 +60,9 @@ class SimulationForegroundService : Service() {
         )
 
         simulationController.mockedSession
+            .distinctUntilChangedBy { it?.let { session -> session.mode to session.status } }
             .onEach { mockedSession ->
+                floatingControls.updateSession(mockedSession)
                 if (mockedSession == null) {
                     stopSelf()
                 } else {
@@ -85,8 +91,14 @@ class SimulationForegroundService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onDestroy() {
+        floatingControls.close()
         serviceScope.cancel()
         super.onDestroy()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        floatingControls.onConfigurationChanged()
     }
 
     private fun startInForeground(notification: Notification) {

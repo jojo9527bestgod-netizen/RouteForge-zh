@@ -11,4 +11,6 @@
     <string name="simulation_notification_channel_name_alerts">模拟定位提示</string>
     <string name="simulation_notification_authorization_lost_title">模拟定位已停止</string>
     <string name="simulation_notification_authorization_lost_text">RouteForge 已不再是所选的模拟位置信息应用，模拟已停止。</string>
+    <string name="simulation_overlay_title">RouteForge 悬浮控制</string>
+    <string name="simulation_overlay_drag">拖动悬浮控制条</string>
 </resources>

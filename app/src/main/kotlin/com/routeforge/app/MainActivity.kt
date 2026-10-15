@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         navigation<SettingsTabRoute>(startDestination = SettingsRoute) {
-                            settingsGraph(navController = navController)
+                            settingsGraph(navController = navController, additionalSettings = { FloatingControlsSettingsSection() })
                         }
                         composable<AddressSearchRoute> { backStackEntry ->
                             val route = backStackEntry.toRoute<AddressSearchRoute>()

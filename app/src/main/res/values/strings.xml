@@ -5,4 +5,10 @@
     <string name="tab_search_label">Search</string>
     <string name="tab_saved_label">Saved</string>
     <string name="tab_settings_label">Settings</string>
+    <string name="floating_controls_title">Floating simulation controls</string>
+    <string name="floating_controls_description">Show pause, resume and stop above navigation apps during simulation. Drag the ↕ handle to move the panel. Stopping simulation removes it.</string>
+    <string name="floating_controls_permission_granted">Display over other apps: allowed</string>
+    <string name="floating_controls_permission_missing">Display over other apps: permission needed</string>
+    <string name="floating_controls_manage_permission">Manage overlay permission</string>
+    <string name="floating_controls_settings_unavailable">Open system settings → Apps → Special app access → Display over other apps to allow RouteForge Chinese.</string>
 </resources>
