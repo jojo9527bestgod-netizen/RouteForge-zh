@@ -1,9 +1,19 @@
 <resources>
-    <string name="address_search_query_placeholder">搜索地点</string>
+    <string name="address_search_query_placeholder">地点名称或坐标</string>
     <string name="address_search_submit_button">搜索</string>
+    <string name="address_search_service_description">全球地点搜索 · Photon / OpenStreetMap</string>
+    <string name="address_search_coordinate_hint">坐标：纬度, 经度；或 (经度×100000, 纬度×100000)。坐标本地识别，无需联网。</string>
+    <string name="address_search_coordinate_result_title">坐标位置 · WGS84</string>
+    <string name="address_search_coordinate_result_address">纬度：%1$s\n经度：%2$s</string>
+    <string name="address_search_error_invalid_coordinates">坐标格式或范围不正确。请输入“纬度, 经度”，或括号整数格式“(经度×100000, 纬度×100000)”。纬度须在 −90～90，经度须在 −180～180。</string>
+    <string name="address_search_add_to_route_button">添加到路线</string>
     <string name="address_search_no_results_message">未找到相关地点。</string>
-    <string name="address_search_error_message">暂时无法搜索，请检查网络连接后重试。</string>
-    <string name="address_search_teleport_button">定位到这里</string>
+    <string name="address_search_error_message">无法连接 Photon 搜索服务，请检查网络连接后重试。</string>
+    <string name="address_search_error_timeout">Photon 搜索响应超时，请稍后重试或切换网络。</string>
+    <string name="address_search_error_rate_limited">搜索服务正在限制请求，请稍等后再搜索。</string>
+    <string name="address_search_error_unavailable">Photon 搜索服务暂时不可用，请稍后重试。</string>
+    <string name="address_search_error_invalid_response">暂时无法读取搜索结果，请稍后重试。</string>
+    <string name="address_search_teleport_button">模拟定位到这里</string>
     <string name="address_search_save_favorite_button">收藏地点</string>
     <string name="address_search_favorite_name_title">收藏地点</string>
     <string name="address_search_favorite_name_label">名称</string>

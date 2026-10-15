@@ -158,6 +158,8 @@ fun RouteRequestScreen(
                 markers = markers,
                 polylinePoints = polylinePoints,
                 cameraTarget = cameraTarget,
+                showRecenterButton = true,
+                recenterTarget = state.currentLocation,
                 mapStyle = state.mapStyle,
                 onMapTap = { latitude, longitude -> onAction(RouteRequestAction.OnMapTap(latitude, longitude)) },
                 modifier = Modifier.fillMaxSize(),
@@ -184,18 +186,26 @@ fun RouteRequestScreen(
     RouteRequestDialogs(state = state, onAction = onAction)
 }
 
-/** Centers the map on the draft's first waypoint (or the last known real location, if the draft is
- *  still empty) exactly once — [hasCenteredOnce] stops a later edit from re-centering under the user. */
+/** Centers initially, then reveals newly confirmed search results. Map taps and marker edits
+ *  retain the user's viewport instead of continuously re-centering. */
 @Composable
 private fun rememberInitialCameraTarget(state: RouteRequestState): LatLng? {
     var hasCenteredOnce by remember { mutableStateOf(false) }
     var cameraTarget by remember { mutableStateOf<LatLng?>(null) }
-    LaunchedEffect(state.draft.points.size, state.lastKnownLocation) {
+    var revealedSearchTarget by remember { mutableStateOf<LatLng?>(null) }
+    LaunchedEffect(state.draft.points.size, state.currentLocation, state.searchCameraTarget) {
+        val searchTarget = state.searchCameraTarget
+        if (searchTarget != null && searchTarget != revealedSearchTarget) {
+            cameraTarget = searchTarget
+            revealedSearchTarget = searchTarget
+            hasCenteredOnce = true
+            return@LaunchedEffect
+        }
         if (hasCenteredOnce) return@LaunchedEffect
         val first = state.draft.points.firstOrNull()
         val target =
             first?.let { LatLng(it.latitude, it.longitude) }
-                ?: state.lastKnownLocation?.let { LatLng(it.latitude, it.longitude) }
+                ?: state.currentLocation
         if (target != null) {
             cameraTarget = target
             hasCenteredOnce = true

@@ -164,6 +164,9 @@ fun SimulationScreen(
                 polylinePoints = mapContent.polylinePoints,
                 traveledPolylinePoints = mapContent.traveledPolylinePoints,
                 cameraTarget = cameraTarget,
+                showRecenterButton = true,
+                recenterTarget = state.mockedSession?.let { LatLng(it.latitude, it.longitude) }
+                    ?: state.realLocation?.let { LatLng(it.latitude, it.longitude) },
                 mapStyle = state.mapStyle,
                 onMapTap = { latitude, longitude ->
                     if (editState.isOpen) {

@@ -7,6 +7,10 @@ import com.routeforge.coredomain.holder.LastKnownRealLocationHolder
 import com.routeforge.coredomain.holder.PendingSearchWaypointHolder
 import com.routeforge.coredomain.holder.SelectedFavoriteWaypointHolder
 import com.routeforge.coredomain.model.LatLng
+import com.routeforge.coredomain.model.RealLocation
+import com.routeforge.simulation.domain.model.SimulationMode
+import com.routeforge.simulation.domain.model.SimulationSession
+import com.routeforge.simulation.domain.model.SimulationStatus
 import com.routeforge.coredomain.model.PlaceSearchResult
 import com.routeforge.coredomain.model.Route
 import com.routeforge.coredomain.model.RoutePlaybackMode
@@ -34,6 +38,7 @@ import com.routeforge.routing.presentation.FakeRoutingEngine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -71,6 +76,8 @@ class RouteRequestViewModelTest {
     private val favoriteRoutesRepository = FakeFavoriteRoutesRepository()
     private val selectedFavoriteWaypointHolder = SelectedFavoriteWaypointHolder()
     private val pendingSearchWaypointHolder = PendingSearchWaypointHolder()
+    private val realLocationHolder = LastKnownRealLocationHolder()
+    private val mockedSession = MutableStateFlow<SimulationSession?>(null)
 
     @BeforeEach
     fun setUp() {
@@ -92,7 +99,7 @@ class RouteRequestViewModelTest {
             lastComputedRouteHolder = lastComputedRouteHolder,
             importRouteFile = ImportRouteFileUseCase(codecs),
             exportRouteFile = ExportRouteFileUseCase(codecs),
-            lastKnownRealLocationHolder = LastKnownRealLocationHolder(),
+            lastKnownRealLocationHolder = realLocationHolder,
             computeRequiredRegions = ComputeRequiredRegionsUseCase(regionCatalog),
             draftWaypointsHolder = DraftWaypointsHolder(),
             favoriteWaypointsRepository = favoriteWaypointsRepository,
@@ -100,8 +107,47 @@ class RouteRequestViewModelTest {
             selectedFavoriteWaypointHolder = selectedFavoriteWaypointHolder,
             pendingSearchWaypointHolder = pendingSearchWaypointHolder,
             observeMapStyle = ObserveMapStyleUseCase(FakeMapStyleStore()),
+            mockedSession = mockedSession,
             backgroundDispatcher = dispatcher,
         )
+
+    @Test
+    fun `current location becomes available and keeps updating without changing the draft`() {
+        val viewModel = createViewModel()
+        assertNull(viewModel.state.value.currentLocation)
+        realLocationHolder.set(RealLocation(35.68, 139.75))
+        assertEquals(LatLng(35.68, 139.75), viewModel.state.value.currentLocation)
+        realLocationHolder.set(RealLocation(35.69, 139.76))
+        assertEquals(LatLng(35.69, 139.76), viewModel.state.value.currentLocation)
+        assertEquals(emptyList<RoutePoint>(), viewModel.state.value.draft.points)
+    }
+
+    @Test
+    fun `current location uses a live or paused simulation and returns to the latest real fix after stop`() {
+        realLocationHolder.set(RealLocation(39.9, 116.4))
+        val viewModel = createViewModel()
+        viewModel.tapAndConfirm(40.0, 116.0)
+        val originalDraft = viewModel.state.value.draft
+        val session = SimulationSession(
+            mode = SimulationMode.STATIONARY,
+            status = SimulationStatus.RUNNING,
+            latitude = 35.68309,
+            longitude = 139.75223,
+            bearingDegrees = 0f,
+            speedMetersPerSecond = 0f,
+            route = null,
+            distanceTraveledMeters = 0.0,
+        )
+        mockedSession.value = session
+        assertEquals(LatLng(35.68309, 139.75223), viewModel.state.value.currentLocation)
+        realLocationHolder.set(RealLocation(39.91, 116.41))
+        assertEquals(LatLng(35.68309, 139.75223), viewModel.state.value.currentLocation)
+        mockedSession.value = session.copy(status = SimulationStatus.PAUSED, latitude = 35.7)
+        assertEquals(LatLng(35.7, 139.75223), viewModel.state.value.currentLocation)
+        mockedSession.value = null
+        assertEquals(LatLng(39.91, 116.41), viewModel.state.value.currentLocation)
+        assertEquals(originalDraft, viewModel.state.value.draft)
+    }
 
     private fun RouteRequestViewModel.tapAndConfirm(
         latitude: Double,
@@ -216,6 +262,30 @@ class RouteRequestViewModelTest {
         assertEquals(2.2945, state.pendingAddLongitude)
         assertEquals("Eiffel Tower", state.pendingAddPlaceName)
         assertEquals(emptyList<RoutePoint>(), state.draft.points)
+        assertNull(pendingSearchWaypointHolder.selected.value)
+    }
+
+    @Test
+    fun `confirming a searched waypoint appends without replacing existing route points`() {
+        val viewModel = createViewModel()
+        viewModel.tapAndConfirm(48.85, 2.29)
+        pendingSearchWaypointHolder.set(
+            PlaceSearchResult("Eiffel Tower", "Paris, France", 48.8584, 2.2945, 1.0),
+        )
+        viewModel.onAction(RouteRequestAction.OnConfirmAddWaypoint)
+        assertEquals(listOf(RoutePoint(48.85, 2.29), RoutePoint(48.8584, 2.2945)), viewModel.state.value.draft.points)
+        assertEquals(LatLng(48.8584, 2.2945), viewModel.state.value.searchCameraTarget)
+        assertNull(viewModel.state.value.pendingAddLatitude)
+    }
+
+    @Test
+    fun `a searched point waiting before planner creation can be cancelled without changing the draft`() {
+        pendingSearchWaypointHolder.set(PlaceSearchResult("Tokyo", "Japan", 35.68, 139.76, 1.0))
+        val viewModel = createViewModel()
+        assertEquals("Tokyo", viewModel.state.value.pendingAddPlaceName)
+        viewModel.onAction(RouteRequestAction.OnDismissAddWaypoint)
+        assertTrue(viewModel.state.value.draft.points.isEmpty())
+        assertNull(viewModel.state.value.searchCameraTarget)
         assertNull(pendingSearchWaypointHolder.selected.value)
     }
 

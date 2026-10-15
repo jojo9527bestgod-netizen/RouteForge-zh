@@ -9,8 +9,8 @@ android {
     namespace = "com.routeforge.app"
     defaultConfig {
         applicationId = "com.routeforge.zh"
-        versionCode = 8
-        versionName = "1.2.4-zh"
+        versionCode = 11
+        versionName = "1.2.7-zh"
     }
 }
 

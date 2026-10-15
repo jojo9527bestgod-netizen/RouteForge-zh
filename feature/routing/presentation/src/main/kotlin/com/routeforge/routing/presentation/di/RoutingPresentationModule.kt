@@ -25,6 +25,7 @@ import com.routeforge.routing.presentation.routerequest.RouteRequestViewModel
 import com.routeforge.routing.presentation.routerequest.waypointedit.WaypointEditViewModel
 import com.routeforge.routing.presentation.savedroutes.SavedRoutesViewModel
 import com.routeforge.routing.presentation.settings.SettingsViewModel
+import com.routeforge.simulation.domain.usecase.ObserveMockedSessionUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -63,6 +64,7 @@ val routingPresentationModule =
                 selectedFavoriteWaypointHolder = get(),
                 pendingSearchWaypointHolder = get(),
                 observeMapStyle = get(),
+                mockedSession = get<ObserveMockedSessionUseCase>()(),
             )
         }
         viewModelOf(::WaypointEditViewModel)

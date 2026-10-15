@@ -105,6 +105,14 @@ class MainActivity : ComponentActivity() {
                                 referenceLatitude = route.referenceLatitude,
                                 referenceLongitude = route.referenceLongitude,
                                 onNavigateBack = { navController.popBackStack() },
+                                onOpenSimulate = {
+                                    navController.popBackStack()
+                                    navController.switchToTab(SimulateTabRoute)
+                                },
+                                onOpenPlan = {
+                                    navController.popBackStack()
+                                    navController.switchToTab(PlanTabRoute)
+                                },
                             )
                         }
                     }

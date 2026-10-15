@@ -7,12 +7,21 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.drawable.BitmapDrawable
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -190,7 +199,7 @@ private fun buildMapComponents(
 ): RouteForgeMapComponents {
     Configuration.getInstance().apply {
         load(context, context.getSharedPreferences(OSMDROID_PREFS_NAME, Context.MODE_PRIVATE))
-        userAgentValue = "RouteForge-zh/1.2.4-zh (${context.packageName}; https://github.com/jojo9527bestgod-netizen/RouteForge-zh)"
+        userAgentValue = "RouteForge-zh/1.2.7-zh (${context.packageName}; https://github.com/jojo9527bestgod-netizen/RouteForge-zh)"
     }
     val mapView =
         MapView(context).apply {
@@ -235,6 +244,8 @@ fun RouteForgeMap(
     regions: List<RouteForgeMapRegionOverlay> = emptyList(),
     cameraTarget: LatLng? = null,
     mapStyle: MapStyle = MapStyle.DEFAULT,
+    showRecenterButton: Boolean = false,
+    recenterTarget: LatLng? = null,
     onMapTap: ((Double, Double) -> Unit)? = null,
 ) {
     val context = LocalContext.current
@@ -386,13 +397,16 @@ fun RouteForgeMap(
     }
 
     val hasSetInitialZoom = remember { mutableStateOf(false) }
-    LaunchedEffect(cameraTarget) {
-        val target = cameraTarget ?: return@LaunchedEffect
+    fun centerMap(target: LatLng) {
         if (!hasSetInitialZoom.value) {
             components.mapView.controller.setZoom(DEFAULT_MAP_ZOOM)
             hasSetInitialZoom.value = true
         }
         components.mapView.controller.setCenter(GeoPoint(target.latitude, target.longitude))
+    }
+    LaunchedEffect(cameraTarget) {
+        val target = cameraTarget ?: return@LaunchedEffect
+        centerMap(target)
     }
 
     val uriHandler = LocalUriHandler.current
@@ -404,6 +418,29 @@ fun RouteForgeMap(
         }
     Box(modifier = modifier.fillMaxSize()) {
         AndroidView(factory = { components.mapView }, modifier = Modifier.fillMaxSize())
+        if (showRecenterButton) {
+            val unavailableMessage = stringResource(R.string.map_location_unavailable)
+            Surface(
+                shape = CircleShape,
+                color = androidx.compose.ui.graphics.Color.White,
+                contentColor = androidx.compose.ui.graphics.Color(0xFF424242),
+                border = BorderStroke(1.dp, androidx.compose.ui.graphics.Color(0xFFDADADA)),
+                shadowElevation = 4.dp,
+                modifier = Modifier.align(Alignment.TopEnd).padding(16.dp).size(48.dp),
+            ) {
+                IconButton(onClick = {
+                    val target = recenterTarget
+                    if (target != null) {
+                        // Run on every tap, even when the position has not changed since the last tap.
+                        centerMap(target)
+                    } else {
+                        Toast.makeText(context, unavailableMessage, Toast.LENGTH_SHORT).show()
+                    }
+                }) {
+                    Icon(Icons.Filled.MyLocation, contentDescription = stringResource(R.string.map_recenter_button))
+                }
+            }
+        }
         Text(
             text = stringResource(attributionResource),
             fontSize = 10.sp,

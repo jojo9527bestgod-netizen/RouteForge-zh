@@ -19,6 +19,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -50,6 +51,8 @@ fun AddressSearchRoot(
     referenceLatitude: Double?,
     referenceLongitude: Double?,
     onNavigateBack: () -> Unit,
+    onOpenSimulate: () -> Unit,
+    onOpenPlan: () -> Unit,
     viewModel: AddressSearchViewModel =
         koinViewModel { parametersOf(sourceContext, referenceLatitude, referenceLongitude) },
 ) {
@@ -59,6 +62,8 @@ fun AddressSearchRoot(
         viewModel.events.collect { event ->
             when (event) {
                 AddressSearchEvent.NavigateBack -> onNavigateBack()
+                AddressSearchEvent.NavigateToPlan -> onOpenPlan()
+                AddressSearchEvent.NavigateToSimulate -> onOpenSimulate()
             }
         }
     }
@@ -99,12 +104,31 @@ fun AddressSearchScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            Text(
+                stringResource(R.string.address_search_service_description),
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(top = Spacing.ControlsRow),
+            )
+
+            Text(
+                stringResource(R.string.address_search_coordinate_hint),
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(top = Spacing.ControlsRow),
+            )
+
             if (state.hasSearched) {
                 Spacer(modifier = Modifier.height(Spacing.ControlsRow))
                 when {
                     state.errorType != null ->
                         Text(
-                            stringResource(R.string.address_search_error_message),
+                            stringResource(when (state.errorType) {
+                                AddressSearchError.TIMEOUT -> R.string.address_search_error_timeout
+                                AddressSearchError.RATE_LIMITED -> R.string.address_search_error_rate_limited
+                                AddressSearchError.SERVICE_UNAVAILABLE -> R.string.address_search_error_unavailable
+                                AddressSearchError.INVALID_RESPONSE -> R.string.address_search_error_invalid_response
+                                AddressSearchError.INVALID_COORDINATES -> R.string.address_search_error_invalid_coordinates
+                                else -> R.string.address_search_error_message
+                            }),
                             modifier = Modifier.padding(top = Spacing.ScreenContent),
                         )
                     state.results.isEmpty() ->
@@ -141,6 +165,7 @@ private fun AddressSearchDialogs(
             TeleportOrFavoriteChoiceSheet(
                 result = choiceResult,
                 onChooseTeleport = { onAction(AddressSearchAction.OnChooseTeleport) },
+                onChooseAddToRoute = { onAction(AddressSearchAction.OnChooseAddToRoute) },
                 onChooseSaveAsFavorite = { onAction(AddressSearchAction.OnChooseSaveAsFavorite) },
                 onDismiss = { onAction(AddressSearchAction.OnDismissChoice) },
             )
@@ -170,8 +195,14 @@ private fun AddressSearchResultsList(
         LazyColumn(modifier = Modifier.fillMaxWidth().height(resultsHeight)) {
             itemsIndexed(results) { index, result ->
                 ListItem(
-                    headlineContent = { Text(result.name) },
-                    supportingContent = { Text(result.formattedAddress) },
+                    headlineContent = {
+                        Text(if (result.isCoordinate) stringResource(R.string.address_search_coordinate_result_title) else result.name)
+                    },
+                    supportingContent = {
+                        Text(if (result.isCoordinate) {
+                            stringResource(R.string.address_search_coordinate_result_address, result.latitude.toString(), result.longitude.toString())
+                        } else result.formattedAddress)
+                    },
                     modifier = Modifier.clickable { onSelectResult(index) },
                 )
             }
@@ -183,11 +214,22 @@ private fun AddressSearchResultsList(
 private fun TeleportOrFavoriteChoiceSheet(
     result: PlaceSearchResult,
     onChooseTeleport: () -> Unit,
+    onChooseAddToRoute: () -> Unit,
     onChooseSaveAsFavorite: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    ConfirmationBottomSheet(title = result.name, onDismiss = onDismiss) {
-        Button(onClick = onChooseTeleport, modifier = Modifier.fillMaxWidth()) {
+    val title = if (result.isCoordinate) stringResource(R.string.address_search_coordinate_result_title) else result.name
+    ConfirmationBottomSheet(title = title, onDismiss = onDismiss) {
+        if (result.isCoordinate) {
+            Text(
+                stringResource(R.string.address_search_coordinate_result_address, result.latitude.toString(), result.longitude.toString()),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
+        Button(onClick = onChooseAddToRoute, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.address_search_add_to_route_button))
+        }
+        TextButton(onClick = onChooseTeleport, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.address_search_teleport_button))
         }
         TextButton(onClick = onChooseSaveAsFavorite, modifier = Modifier.fillMaxWidth()) {

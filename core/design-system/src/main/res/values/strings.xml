@@ -1,4 +1,6 @@
 <resources>
+    <string name="map_recenter_button">Return to current location</string>
+    <string name="map_location_unavailable">Current location is unavailable. Check location permission and location services, then try again.</string>
     <string name="map_attribution_osm_fr">© OpenStreetMap contributors · HOT · OSM France</string>
     <string name="map_attribution_standard">© OpenStreetMap contributors</string>
     <string name="map_attribution_topographic">© OpenStreetMap · SRTM · OpenTopoMap (CC-BY-SA)</string>

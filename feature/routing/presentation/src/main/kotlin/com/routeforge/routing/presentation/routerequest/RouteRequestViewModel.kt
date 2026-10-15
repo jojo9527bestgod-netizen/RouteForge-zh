@@ -21,12 +21,15 @@ import com.routeforge.coredomain.model.RouteOptions
 import com.routeforge.coredomain.usecase.ComputeRequiredRegionsUseCase
 import com.routeforge.routing.domain.usecase.ExportRouteFileUseCase
 import com.routeforge.routing.domain.usecase.ImportRouteFileUseCase
+import com.routeforge.simulation.domain.model.SimulationSession
 import com.routeforge.coredomain.usecase.ObserveMapStyleUseCase
 import com.routeforge.coredomain.usecase.PrepareRouteOptionsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -50,6 +53,7 @@ class RouteRequestViewModel(
     private val selectedFavoriteWaypointHolder: SelectedFavoriteWaypointHolder,
     private val pendingSearchWaypointHolder: PendingSearchWaypointHolder,
     observeMapStyle: ObserveMapStyleUseCase,
+    mockedSession: StateFlow<SimulationSession?>,
     private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _state = MutableStateFlow(RouteRequestState(lastKnownLocation = lastKnownRealLocationHolder.location.value))
@@ -59,6 +63,13 @@ class RouteRequestViewModel(
     val events = _events.receiveAsFlow()
 
     init {
+        combine(lastKnownRealLocationHolder.location, mockedSession) { real, session ->
+            real to (session?.let { LatLng(it.latitude, it.longitude) }
+                ?: real?.let { LatLng(it.latitude, it.longitude) })
+        }.onEach { (real, position) ->
+            _state.update { it.copy(lastKnownLocation = real, currentLocation = position) }
+        }.launchIn(viewModelScope)
+
         observeMapStyle()
             .onEach { mapStyle -> _state.update { it.copy(mapStyle = mapStyle) } }
             .launchIn(viewModelScope)
@@ -156,7 +167,9 @@ class RouteRequestViewModel(
         val longitude = _state.value.pendingAddLongitude
         if (latitude == null || longitude == null) return
         if (_state.value.isSaveAsFavoriteChecked && _state.value.favoriteNameInput.isBlank()) return
+        val fromSearch = _state.value.pendingAddPlaceName != null
         mutateDraft { it.add(RoutePoint(latitude = latitude, longitude = longitude)) }
+        if (fromSearch) _state.update { it.copy(searchCameraTarget = LatLng(latitude, longitude)) }
         if (_state.value.isSaveAsFavoriteChecked) {
             favoriteWaypointsRepository.add(_state.value.favoriteNameInput, latitude, longitude)
         }

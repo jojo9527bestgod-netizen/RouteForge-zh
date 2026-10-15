@@ -1,6 +1,7 @@
 package com.routeforge.addresssearch.domain.usecase
 
 import com.routeforge.addresssearch.domain.GeocodeClient
+import com.routeforge.addresssearch.domain.SearchPlacesError
 import com.routeforge.coredomain.DataError
 import com.routeforge.coredomain.Result
 import com.routeforge.coredomain.holder.LastKnownRealLocationHolder
@@ -8,6 +9,8 @@ import com.routeforge.coredomain.model.PlaceSearchResult
 import com.routeforge.coredomain.model.RealLocation
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 private class FakeGeocodeClient(
@@ -70,7 +73,7 @@ class SearchPlacesUseCaseTest {
 
             val result = useCase("query", fallbackReferenceLatitude = null, fallbackReferenceLongitude = null)
 
-            assertEquals(Result.Error(DataError.Network.NO_INTERNET), result)
+            assertEquals(Result.Error(SearchPlacesError.Network(DataError.Network.NO_INTERNET)), result)
         }
 
     @Test
@@ -80,4 +83,32 @@ class SearchPlacesUseCaseTest {
 
             assertEquals("Rua Example, 123", geocodeClient.lastQuery)
         }
+
+    @Test
+    fun `Google coordinates return one local result while the geocoder is offline`() = runTest {
+        geocodeClient.result = Result.Error(DataError.Network.NO_INTERNET)
+        val result = useCase("35.68309115595934, 139.75222770699756", null, null) as Result.Success
+        val point = result.data.single()
+        assertEquals(35.68309115595934, point.latitude)
+        assertEquals(139.75222770699756, point.longitude)
+        assertTrue(point.isCoordinate)
+        assertNull(geocodeClient.lastQuery)
+    }
+
+    @Test
+    fun `scaled integer coordinates bypass online search and proximity ranking`() = runTest {
+        lastKnownRealLocationHolder.set(RealLocation(latitude = -80.0, longitude = -170.0))
+        val result = useCase("(13975223, 3568309)", 0.0, 0.0) as Result.Success
+        val point = result.data.single()
+        assertEquals(35.68309, point.latitude)
+        assertEquals(139.75223, point.longitude)
+        assertTrue(point.isCoordinate)
+        assertNull(geocodeClient.lastQuery)
+    }
+
+    @Test
+    fun `invalid coordinate input produces a local validation error without network traffic`() = runTest {
+        assertEquals(Result.Error(SearchPlacesError.InvalidCoordinates), useCase("139.75,35.68", null, null))
+        assertNull(geocodeClient.lastQuery)
+    }
 }

@@ -1,9 +1,19 @@
 <resources>
-    <string name="address_search_query_placeholder">Search for a place</string>
+    <string name="address_search_query_placeholder">Place name or coordinates</string>
     <string name="address_search_submit_button">Search</string>
+    <string name="address_search_service_description">Global place search · Photon / OpenStreetMap</string>
+    <string name="address_search_coordinate_hint">Coordinates: latitude, longitude; or (longitude × 100000, latitude × 100000). Parsed offline.</string>
+    <string name="address_search_coordinate_result_title">Coordinate location · WGS84</string>
+    <string name="address_search_coordinate_result_address">Latitude: %1$s\nLongitude: %2$s</string>
+    <string name="address_search_error_invalid_coordinates">Invalid coordinates. Use latitude, longitude; or a parenthesized integer pair (longitude × 100000, latitude × 100000). Latitude must be −90 to 90 and longitude −180 to 180.</string>
+    <string name="address_search_add_to_route_button">Add to route</string>
     <string name="address_search_no_results_message">No results found.</string>
-    <string name="address_search_error_message">Couldn\'t search right now. Check your connection and try again.</string>
-    <string name="address_search_teleport_button">Teleport here</string>
+    <string name="address_search_error_message">Couldn\'t connect to Photon. Check your connection and try again.</string>
+    <string name="address_search_error_timeout">Photon took too long to respond. Try again later or switch networks.</string>
+    <string name="address_search_error_rate_limited">The search service is limiting requests. Please wait before searching again.</string>
+    <string name="address_search_error_unavailable">Photon is temporarily unavailable. Please try again later.</string>
+    <string name="address_search_error_invalid_response">Couldn\'t read the search results. Please try again later.</string>
+    <string name="address_search_teleport_button">Mock location here</string>
     <string name="address_search_save_favorite_button">Save as favorite</string>
     <string name="address_search_favorite_name_title">Save as favorite</string>
     <string name="address_search_favorite_name_label">Name</string>

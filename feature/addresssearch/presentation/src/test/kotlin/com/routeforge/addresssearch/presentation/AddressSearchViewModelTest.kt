@@ -213,6 +213,54 @@ class AddressSearchViewModelTest {
         }
 
     @Test
+    fun `general search can hand a foreign place to route planning without teleporting`() = runTest {
+        val result = place("Eiffel Tower", 48.8584, 2.2945)
+        geocodeClient.result = Result.Success(listOf(result))
+        val viewModel = createViewModel()
+        viewModel.onAction(AddressSearchAction.OnQueryChange("Eiffel Tower"))
+        viewModel.onAction(AddressSearchAction.OnSubmit)
+        viewModel.onAction(AddressSearchAction.OnSelectResult(0))
+        val event = async { viewModel.events.first() }
+
+        viewModel.onAction(AddressSearchAction.OnChooseAddToRoute)
+
+        assertEquals(result, pendingSearchWaypointHolder.selected.value)
+        assertNull(pendingTeleportTargetHolder.target.value)
+        assertNull(viewModel.state.value.pendingChoiceResult)
+        assertEquals(AddressSearchEvent.NavigateToPlan, event.await())
+        assertTrue(favoriteWaypointsRepository.added.isEmpty())
+    }
+
+    @Test
+    fun `dismissed result cannot later be added to a route`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.onAction(AddressSearchAction.OnQueryChange("query"))
+        viewModel.onAction(AddressSearchAction.OnSubmit)
+        viewModel.onAction(AddressSearchAction.OnSelectResult(0))
+        viewModel.onAction(AddressSearchAction.OnDismissChoice)
+        viewModel.onAction(AddressSearchAction.OnChooseAddToRoute)
+        assertNull(pendingSearchWaypointHolder.selected.value)
+    }
+
+    @Test
+    fun `timeout rate limit and response failures have actionable error states`() = runTest {
+        for ((networkError, expected) in listOf(
+            DataError.Network.REQUEST_TIMEOUT to AddressSearchError.TIMEOUT,
+            DataError.Network.TOO_MANY_REQUESTS to AddressSearchError.RATE_LIMITED,
+            DataError.Network.SERVER_ERROR to AddressSearchError.SERVICE_UNAVAILABLE,
+            DataError.Network.FORBIDDEN to AddressSearchError.SERVICE_UNAVAILABLE,
+            DataError.Network.SERIALIZATION to AddressSearchError.INVALID_RESPONSE,
+        )) {
+            geocodeClient.result = Result.Error(networkError)
+            val viewModel = createViewModel()
+            viewModel.onAction(AddressSearchAction.OnQueryChange("Paris"))
+            viewModel.onAction(AddressSearchAction.OnSubmit)
+            assertEquals(expected, viewModel.state.value.errorType)
+            assertFalse(viewModel.state.value.isLoading)
+        }
+    }
+
+    @Test
     fun `choosing teleport hands off the result's coordinates as a route point`() =
         runTest {
             val result = place(latitude = 10.0, longitude = 20.0)
@@ -227,8 +275,52 @@ class AddressSearchViewModelTest {
 
             assertEquals(10.0, pendingTeleportTargetHolder.target.value?.latitude)
             assertEquals(20.0, pendingTeleportTargetHolder.target.value?.longitude)
-            assertEquals(AddressSearchEvent.NavigateBack, eventDeferred.await())
+            assertEquals(AddressSearchEvent.NavigateToSimulate, eventDeferred.await())
         }
+
+    @Test
+    fun `coordinate search from planner uses the exact local point for waypoint confirmation`() = runTest {
+        geocodeClient.result = Result.Error(DataError.Network.NO_INTERNET)
+        val viewModel = createViewModel(SearchSourceContext.PLAN_ROUTE)
+        viewModel.onAction(AddressSearchAction.OnQueryChange("35.68309115595934, 139.75222770699756"))
+        viewModel.onAction(AddressSearchAction.OnSubmit)
+        assertTrue(viewModel.state.value.results.single().isCoordinate)
+        assertNull(viewModel.state.value.errorType)
+        val event = async { viewModel.events.first() }
+        viewModel.onAction(AddressSearchAction.OnSelectResult(0))
+        assertEquals(35.68309115595934, pendingSearchWaypointHolder.selected.value?.latitude)
+        assertEquals(139.75222770699756, pendingSearchWaypointHolder.selected.value?.longitude)
+        assertEquals(AddressSearchEvent.NavigateBack, event.await())
+    }
+
+    @Test
+    fun `scaled coordinate result can navigate to the simulator without an online search`() = runTest {
+        geocodeClient.result = Result.Error(DataError.Network.NO_INTERNET)
+        val viewModel = createViewModel()
+        viewModel.onAction(AddressSearchAction.OnQueryChange("(13975223, 3568309)"))
+        viewModel.onAction(AddressSearchAction.OnSubmit)
+        viewModel.onAction(AddressSearchAction.OnSelectResult(0))
+        val event = async { viewModel.events.first() }
+        viewModel.onAction(AddressSearchAction.OnChooseTeleport)
+        assertEquals(35.68309, pendingTeleportTargetHolder.target.value?.latitude)
+        assertEquals(139.75223, pendingTeleportTargetHolder.target.value?.longitude)
+        assertNull(viewModel.state.value.pendingChoiceResult)
+        assertEquals(AddressSearchEvent.NavigateToSimulate, event.await())
+    }
+
+    @Test
+    fun `invalid coordinate error clears after entering valid coordinates`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.onAction(AddressSearchAction.OnQueryChange("139.75,35.68"))
+        viewModel.onAction(AddressSearchAction.OnSubmit)
+        assertEquals(AddressSearchError.INVALID_COORDINATES, viewModel.state.value.errorType)
+        assertTrue(viewModel.state.value.results.isEmpty())
+        assertFalse(viewModel.state.value.isLoading)
+        viewModel.onAction(AddressSearchAction.OnQueryChange("35.68,139.75"))
+        viewModel.onAction(AddressSearchAction.OnSubmit)
+        assertNull(viewModel.state.value.errorType)
+        assertEquals(1, viewModel.state.value.results.size)
+    }
 
     @Test
     fun `confirming a blank favorite name does not save it`() =

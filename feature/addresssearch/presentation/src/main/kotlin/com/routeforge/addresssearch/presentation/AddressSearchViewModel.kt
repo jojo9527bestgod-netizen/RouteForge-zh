@@ -3,7 +3,9 @@ package com.routeforge.addresssearch.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.routeforge.addresssearch.domain.usecase.SearchPlacesUseCase
+import com.routeforge.addresssearch.domain.SearchPlacesError
 import com.routeforge.coredomain.FavoriteWaypointsRepository
+import com.routeforge.coredomain.DataError
 import com.routeforge.coredomain.Result
 import com.routeforge.coredomain.holder.PendingSearchWaypointHolder
 import com.routeforge.coredomain.holder.PendingTeleportTargetHolder
@@ -44,6 +46,7 @@ class AddressSearchViewModel(
             is AddressSearchAction.OnSelectResult -> selectResult(action.index)
             AddressSearchAction.OnDismissChoice -> _state.update { it.copy(pendingChoiceResult = null) }
             AddressSearchAction.OnChooseTeleport -> chooseTeleport()
+            AddressSearchAction.OnChooseAddToRoute -> chooseAddToRoute()
             AddressSearchAction.OnChooseSaveAsFavorite ->
                 _state.update {
                     it.copy(isNamingFavorite = true, favoriteNameInput = it.pendingChoiceResult?.name.orEmpty())
@@ -74,7 +77,18 @@ class AddressSearchViewModel(
                                 isLoading = false,
                                 hasSearched = true,
                                 results = emptyList(),
-                                errorType = AddressSearchError.NETWORK_FAILURE,
+                                errorType = when (val error = result.error) {
+                                    SearchPlacesError.InvalidCoordinates -> AddressSearchError.INVALID_COORDINATES
+                                    is SearchPlacesError.Network -> when (error.error) {
+                                        DataError.Network.REQUEST_TIMEOUT -> AddressSearchError.TIMEOUT
+                                        DataError.Network.TOO_MANY_REQUESTS -> AddressSearchError.RATE_LIMITED
+                                        DataError.Network.SERIALIZATION -> AddressSearchError.INVALID_RESPONSE
+                                        DataError.Network.SERVER_ERROR, DataError.Network.SERVICE_UNAVAILABLE,
+                                        DataError.Network.UNAUTHORIZED, DataError.Network.FORBIDDEN,
+                                        DataError.Network.NOT_FOUND -> AddressSearchError.SERVICE_UNAVAILABLE
+                                        else -> AddressSearchError.NETWORK_FAILURE
+                                    }
+                                },
                             )
                         }
                 }
@@ -93,8 +107,16 @@ class AddressSearchViewModel(
 
     private fun chooseTeleport() {
         val result = _state.value.pendingChoiceResult ?: return
+        _state.update { it.copy(pendingChoiceResult = null) }
         pendingTeleportTargetHolder.set(RoutePoint(latitude = result.latitude, longitude = result.longitude))
-        viewModelScope.launch { _events.send(AddressSearchEvent.NavigateBack) }
+        viewModelScope.launch { _events.send(AddressSearchEvent.NavigateToSimulate) }
+    }
+
+    private fun chooseAddToRoute() {
+        val result = _state.value.pendingChoiceResult ?: return
+        _state.update { it.copy(pendingChoiceResult = null) }
+        pendingSearchWaypointHolder.set(result)
+        viewModelScope.launch { _events.send(AddressSearchEvent.NavigateToPlan) }
     }
 
     private fun confirmFavoriteName() {

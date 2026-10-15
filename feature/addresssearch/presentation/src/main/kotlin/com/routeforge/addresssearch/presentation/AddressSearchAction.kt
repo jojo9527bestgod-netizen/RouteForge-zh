@@ -15,6 +15,8 @@ sealed interface AddressSearchAction {
 
     data object OnChooseTeleport : AddressSearchAction
 
+    data object OnChooseAddToRoute : AddressSearchAction
+
     data object OnChooseSaveAsFavorite : AddressSearchAction
 
     data class OnFavoriteNameChange(

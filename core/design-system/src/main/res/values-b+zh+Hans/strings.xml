@@ -1,4 +1,6 @@
 <resources>
+    <string name="map_recenter_button">回到当前定位点</string>
+    <string name="map_location_unavailable">暂未获取到当前位置，请检查定位权限和系统定位后重试。</string>
     <string name="map_attribution_osm_fr">© OpenStreetMap 贡献者 · HOT · OSM France</string>
     <string name="map_attribution_standard">© OpenStreetMap 贡献者</string>
     <string name="map_attribution_topographic">© OpenStreetMap · SRTM · OpenTopoMap（CC-BY-SA）</string>

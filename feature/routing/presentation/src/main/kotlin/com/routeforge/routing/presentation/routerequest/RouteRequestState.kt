@@ -1,6 +1,7 @@
 package com.routeforge.routing.presentation.routerequest
 
 import com.routeforge.coredomain.model.MapStyle
+import com.routeforge.coredomain.model.LatLng
 import com.routeforge.coredomain.model.RealLocation
 import com.routeforge.coredomain.model.Route
 import com.routeforge.coredomain.model.RoutePlaybackMode
@@ -17,12 +18,16 @@ data class RouteRequestState(
     val route: Route? = null,
     val errorType: RouteRequestError? = null,
     val lastKnownLocation: RealLocation? = null,
+    /** Active simulated position, otherwise the latest known real position. */
+    val currentLocation: LatLng? = null,
     val missingRegionsWarning: RequiredRegionsSummary? = null,
     val pendingAddLatitude: Double? = null,
     val pendingAddLongitude: Double? = null,
     /** Set when the pending add came from address search (not a map tap) — lets the confirmation
      *  sheet name the place instead of only showing raw coordinates. */
     val pendingAddPlaceName: String? = null,
+    /** Last confirmed search point; lets the map reveal distant results without following map taps. */
+    val searchCameraTarget: LatLng? = null,
     val isSaveAsFavoriteChecked: Boolean = false,
     val favoriteNameInput: String = "",
     val isSaveRouteSheetOpen: Boolean = false,

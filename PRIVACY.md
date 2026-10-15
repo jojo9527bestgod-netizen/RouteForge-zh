@@ -21,10 +21,12 @@
 | --- | --- | --- |
 | 默认备用地图 | OSM France HOT | 地图瓦片编号，可反映浏览的区域 |
 | 其他地图样式 | OpenStreetMap / OpenTopoMap | 对应地图瓦片编号 |
-| 手动地点搜索 | OpenStreetMap Nominatim | 用户提交的搜索文字；距离排序在手机本地完成 |
+| 手动地点搜索 | Photon（komoot 公共接口，数据来自 OpenStreetMap） | 用户提交的搜索文字；距离排序在手机本地完成，不向搜索服务发送手机定位 |
 | 路网下载 | brouter.de | 所需区域的路网瓦片文件名称 |
 
-输入文字本身不会逐字请求自动补全，点击搜索后才提交。请勿在公共地点搜索中输入私人身份信息。
+输入文字本身不会逐字请求自动补全，点击搜索后才提交。最近最多 20 条成功查询及结果只缓存在当前进程内存中，进程退出后清除，不写入查询历史文件。请勿在公共地点搜索中输入私人身份信息。旧版 1.2.4-zh 及之前版本使用 Nominatim，网络请求内容同为搜索文字。
+
+应用会优先在手机上解析支持的坐标格式，正确或格式错误的坐标输入均不提交到 Photon。坐标本身不用于反查地名；在地图上查看相应区域时，地图瓦片请求仍可反映该区域。回到当前定位点按钮只控制本机地图视图，不向地点搜索服务发送定位。
 
 维护者不控制第三方服务的日志、隐私政策或可用性。相关说明：
 
@@ -32,6 +34,7 @@
 - [OpenStreetMap 数据版权与许可](https://www.openstreetmap.org/copyright)
 - [OSM France 使用条件](https://www.openstreetmap.fr/usage/)
 - [Nominatim 使用条件](https://operations.osmfoundation.org/policies/nominatim/)
+- [Photon 项目与公共服务使用条件](https://github.com/komoot/photon#demo-server)
 - [OpenStreetMap 公共瓦片使用条件](https://operations.osmfoundation.org/policies/tiles/)
 - [BRouter](https://brouter.de/)
 - [OpenTopoMap](https://opentopomap.org/about)

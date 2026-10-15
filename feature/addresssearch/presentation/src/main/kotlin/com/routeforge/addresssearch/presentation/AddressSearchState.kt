@@ -4,6 +4,11 @@ import com.routeforge.coredomain.model.PlaceSearchResult
 
 enum class AddressSearchError {
     NETWORK_FAILURE,
+    TIMEOUT,
+    RATE_LIMITED,
+    SERVICE_UNAVAILABLE,
+    INVALID_RESPONSE,
+    INVALID_COORDINATES,
 }
 
 data class AddressSearchState(

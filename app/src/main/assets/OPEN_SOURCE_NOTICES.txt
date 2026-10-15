@@ -30,7 +30,7 @@ AndroidX / Jetpack Compose、Kotlin、Kotlin Coroutines / Serialization、Ktor�
 
 OpenStreetMap 数据由 OpenStreetMap 贡献者提供，适用 [ODbL 数据许可及署名要求](https://www.openstreetmap.org/copyright)。应用保留地图角落中的可见署名。
 
-地图服务和数据许可分别适用各自的条件：OSM France HOT 要求免费、非营利、流量适量及有效请求标识；公共地图和 Nominatim 搜索不用于批量抓取或压测。详见 [OSM France](https://www.openstreetmap.fr/usage/)、[Nominatim](https://operations.osmfoundation.org/policies/nominatim/) 和 [PRIVACY.md](PRIVACY.md)。
+地图服务和数据许可分别适用各自的条件：OSM France HOT 要求免费、非营利、流量适量及有效请求标识；公共地图和 Photon 搜索不用于批量抓取或压测。Photon 公共演示接口仅允许合理使用，大量请求可能被限流或封禁，服务不保证持续可用。这里只调用在线接口，没有将 Photon 服务端软件打包进 APK。详见 [OSM France](https://www.openstreetmap.fr/usage/)、[Photon 公共服务说明](https://github.com/komoot/photon#demo-server) 和 [PRIVACY.md](PRIVACY.md)。
 
 ## APK 内的声明
 
