@@ -13,4 +13,9 @@
     <string name="simulation_notification_authorization_lost_text">RouteForge 已不再是所选的模拟位置信息应用，模拟已停止。</string>
     <string name="simulation_overlay_title">RouteForge 悬浮控制</string>
     <string name="simulation_overlay_drag">拖动悬浮控制条</string>
+    <string name="simulation_overlay_speed_value">%1$d km/h</string>
+    <string name="simulation_overlay_speed_decrease">减速 1 公里/小时，长按连续减速</string>
+    <string name="simulation_overlay_speed_increase">加速 1 公里/小时，长按连续加速</string>
+    <string name="simulation_overlay_expand">展开控制条，长按可拖动</string>
+    <string name="simulation_overlay_collapse">收起控制条，长按可拖动</string>
 </resources>

@@ -6,9 +6,16 @@
     <string name="tab_saved_label">收藏</string>
     <string name="tab_settings_label">设置</string>
     <string name="floating_controls_title">悬浮模拟控制</string>
-    <string name="floating_controls_description">模拟时，在导航软件上显示暂停、继续和停止按钮。拖动 ↕ 调整位置，停止模拟后自动消失。</string>
+    <string name="floating_controls_description">小型半透明控制条：点箭头收起或展开，长按箭头拖动。点按 ± 调整 1 公里/小时，长按连续调整；停止后自动消失。</string>
     <string name="floating_controls_permission_granted">显示在其他应用上层：已授权</string>
     <string name="floating_controls_permission_missing">显示在其他应用上层：待授权</string>
     <string name="floating_controls_manage_permission">管理悬浮窗权限</string>
     <string name="floating_controls_settings_unavailable">请到系统设置 → 应用 → 特殊应用权限 → 显示在其他应用上层，允许 RouteForge 中文版。</string>
+    <string name="background_settings_title">后台模拟运行</string>
+    <string name="background_settings_description">长时间模拟请允许后台行为，并关闭本应用的省电优化。OPPO：应用详情 → 耗电管理 → 允许应用后台行为。轨迹运行时会保持处理器唤醒，耗电会增加；系统强行停止后仍需手动重新开始。</string>
+    <string name="background_battery_exempt">系统省电优化：不限制</string>
+    <string name="background_battery_optimized">系统省电优化：可能限制后台运行</string>
+    <string name="background_request_exemption">允许不受省电限制</string>
+    <string name="background_open_app_settings">打开应用后台设置</string>
+    <string name="background_settings_unavailable">请到系统设置中的本应用详情，允许后台行为并设为不优化。</string>
 </resources>

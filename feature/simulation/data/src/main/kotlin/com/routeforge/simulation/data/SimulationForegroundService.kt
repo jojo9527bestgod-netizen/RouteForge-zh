@@ -11,9 +11,13 @@ import android.content.pm.ServiceInfo
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.IBinder
+import android.os.PowerManager
+import android.util.Log
 import com.routeforge.simulation.domain.SimulationController
 import com.routeforge.simulation.domain.model.SimulationMode
 import com.routeforge.simulation.domain.model.SimulationStatus
+import com.routeforge.simulation.domain.model.SpeedSetting
+import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -45,11 +49,30 @@ class SimulationForegroundService : Service() {
     private val simulationController: SimulationController by inject()
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private lateinit var floatingControls: SimulationFloatingControls
+    private lateinit var powerKeeper: SimulationPowerKeeper
 
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        floatingControls = SimulationFloatingControls(this, simulationController::pause, simulationController::resume, simulationController::stop)
+        val wakeLock = getSystemService(PowerManager::class.java)
+            .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RouteForge:Simulation")
+            .apply { setReferenceCounted(false) }
+        powerKeeper = SimulationPowerKeeper(
+            serviceScope,
+            acquire = { timeout ->
+                try { wakeLock.acquire(timeout) } catch (error: SecurityException) {
+                    Log.w("SimulationService", "Could not acquire simulation wake lock", error)
+                }
+            },
+            release = {
+                try { if (wakeLock.isHeld) wakeLock.release() } catch (error: RuntimeException) {
+                    Log.w("SimulationService", "Simulation wake lock was already released", error)
+                }
+            },
+        )
+        floatingControls = SimulationFloatingControls(
+            this, simulationController::pause, simulationController::resume, simulationController::stop, ::adjustSpeed,
+        )
         val initialSession = simulationController.mockedSession.value
         startInForeground(
             if (initialSession != null) {
@@ -60,9 +83,16 @@ class SimulationForegroundService : Service() {
         )
 
         simulationController.mockedSession
+            .distinctUntilChangedBy { it?.let { session -> Triple(session.mode, session.status, session.speedSetting) } }
+            .onEach { floatingControls.updateSession(it) }
+            .launchIn(serviceScope)
+
+        simulationController.mockedSession
             .distinctUntilChangedBy { it?.let { session -> session.mode to session.status } }
             .onEach { mockedSession ->
-                floatingControls.updateSession(mockedSession)
+                powerKeeper.setActive(
+                    mockedSession != null && mockedSession.status == SimulationStatus.RUNNING && mockedSession.mode != SimulationMode.STATIONARY,
+                )
                 if (mockedSession == null) {
                     stopSelf()
                 } else {
@@ -90,7 +120,16 @@ class SimulationForegroundService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
+    private fun adjustSpeed(deltaKmh: Int) {
+        val session = simulationController.mockedSession.value ?: return
+        if (session.mode == SimulationMode.STATIONARY || session.status == SimulationStatus.COMPLETED) return
+        val currentKmh = (session.speedSetting.metersPerSecond * 3.6f).roundToInt()
+        val updatedKmh = (currentKmh + deltaKmh).coerceIn(0, 150)
+        if (updatedKmh != currentKmh) simulationController.setSpeed(SpeedSetting.Manual(updatedKmh / 3.6f))
+    }
+
     override fun onDestroy() {
+        powerKeeper.close()
         floatingControls.close()
         serviceScope.cancel()
         super.onDestroy()

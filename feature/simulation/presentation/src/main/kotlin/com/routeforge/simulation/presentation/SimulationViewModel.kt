@@ -92,7 +92,17 @@ class SimulationViewModel(
     init {
         observeMockedSessionUseCase()
             .onEach { mockedSession ->
-                _state.update { it.copy(mockedSession = mockedSession) }
+                _state.update { current ->
+                    current.copy(
+                        mockedSession = mockedSession,
+                        playbackSpeedKmh = if (mockedSession?.mode == SimulationMode.ROUTE) {
+                            mockedSession.speedSetting.metersPerSecond * KMH_TO_MPS_DIVISOR
+                        } else current.playbackSpeedKmh,
+                        joystickSpeedKmh = if (mockedSession?.mode == SimulationMode.JOYSTICK) {
+                            mockedSession.speedSetting.metersPerSecond * KMH_TO_MPS_DIVISOR
+                        } else current.joystickSpeedKmh,
+                    )
+                }
                 if (mockedSession?.mode != SimulationMode.JOYSTICK) {
                     joystickSessionStarted = false
                 }

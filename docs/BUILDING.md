@@ -29,7 +29,7 @@ Debug 输出在 `app/build/outputs/apk/debug/`，使用本机调试签名。Rele
 ## 回归检查
 
 ```sh
-./gradlew :core:domain:test :feature:simulation:domain:test :feature:simulation:presentation:testDebugUnitTest :feature:routing:domain:test :feature:routing:data:testDebugUnitTest :feature:routing:presentation:testDebugUnitTest
+./gradlew :core:domain:test :feature:simulation:domain:test :feature:simulation:data:testDebugUnitTest :feature:simulation:presentation:testDebugUnitTest :feature:routing:domain:test :feature:routing:data:testDebugUnitTest :feature:routing:presentation:testDebugUnitTest
 ```
 
 检查覆盖路线、下载完整性、模拟控制和收藏。测试通过不能替代地图访问、后台播放和导航兼容性真机验证。

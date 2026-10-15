@@ -188,28 +188,31 @@ internal class SimulationControllerImpl(
     }
 
     internal fun tick(elapsedSeconds: Double) {
-        val current = _mockedSession.value ?: return
-
+        if (_mockedSession.value == null) return
         if (!mockLocationAuthorizationChecker.isAuthorized()) {
             stop()
             _authorizationLost.tryEmit(Unit)
             return
         }
 
-        val updated =
-            when {
-                current.status == SimulationStatus.RUNNING && current.mode == SimulationMode.ROUTE ->
-                    tickRoute(current, elapsedSeconds)
-                current.status == SimulationStatus.RUNNING && current.mode == SimulationMode.JOYSTICK ->
-                    tickJoystick(current, elapsedSeconds)
-                else -> current
+        while (true) {
+            val current = _mockedSession.value ?: return
+            val updated =
+                when {
+                    current.status == SimulationStatus.RUNNING && current.mode == SimulationMode.ROUTE ->
+                        tickRoute(current, elapsedSeconds)
+                    current.status == SimulationStatus.RUNNING && current.mode == SimulationMode.JOYSTICK ->
+                        tickJoystick(current, elapsedSeconds)
+                    else -> current
+                }
+
+            // A speed, pause or stop arriving during interpolation must not be overwritten by this tick.
+            if (!_mockedSession.compareAndSet(current, updated)) continue
+            publishCurrent()
+            if (current.status != SimulationStatus.COMPLETED && updated.status == SimulationStatus.COMPLETED) {
+                scheduleCompletionAutoStop(updated)
             }
-
-        _mockedSession.value = updated
-        publishCurrent()
-
-        if (current.status != SimulationStatus.COMPLETED && updated.status == SimulationStatus.COMPLETED) {
-            scheduleCompletionAutoStop(updated)
+            return
         }
     }
 

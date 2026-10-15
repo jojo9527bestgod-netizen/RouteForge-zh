@@ -6,9 +6,16 @@
     <string name="tab_saved_label">Saved</string>
     <string name="tab_settings_label">Settings</string>
     <string name="floating_controls_title">Floating simulation controls</string>
-    <string name="floating_controls_description">Show pause, resume and stop above navigation apps during simulation. Drag the ↕ handle to move the panel. Stopping simulation removes it.</string>
+    <string name="floating_controls_description">Compact translucent playback and speed controls. Tap the chevron to collapse or expand; hold it to drag. Tap ± for 1 km/h steps; hold to repeat. Stopping simulation removes the panel.</string>
     <string name="floating_controls_permission_granted">Display over other apps: allowed</string>
     <string name="floating_controls_permission_missing">Display over other apps: permission needed</string>
     <string name="floating_controls_manage_permission">Manage overlay permission</string>
     <string name="floating_controls_settings_unavailable">Open system settings → Apps → Special app access → Display over other apps to allow RouteForge Chinese.</string>
+    <string name="background_settings_title">Background simulation</string>
+    <string name="background_settings_description">For long simulations, allow background activity and disable battery optimization for this app. On OPPO: App info → Battery usage → Allow background activity. Moving simulation keeps the CPU awake and uses more battery. A system force stop still requires restarting manually.</string>
+    <string name="background_battery_exempt">System battery optimization: unrestricted</string>
+    <string name="background_battery_optimized">System battery optimization: may restrict background work</string>
+    <string name="background_request_exemption">Allow unrestricted battery use</string>
+    <string name="background_open_app_settings">Open app background settings</string>
+    <string name="background_settings_unavailable">Open this app in system Settings and allow background activity and unrestricted battery use.</string>
 </resources>

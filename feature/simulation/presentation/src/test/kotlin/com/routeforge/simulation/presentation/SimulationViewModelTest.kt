@@ -121,6 +121,30 @@ class SimulationViewModelTest {
         )
 
     @Test
+    fun `external route speed stays in sync while paused and after stop`() {
+        val viewModel = createViewModel()
+        val speed = SpeedSetting.Manual(42f / 3.6f)
+        controller.emit(stationarySession().copy(
+            mode = SimulationMode.ROUTE, status = SimulationStatus.PAUSED, route = sampleRoute,
+            speedSetting = speed, speedMetersPerSecond = speed.metersPerSecond,
+        ))
+        assertEquals(42f, viewModel.state.value.playbackSpeedKmh, 0.001f)
+        assertEquals(5f, viewModel.state.value.joystickSpeedKmh, 0.001f)
+        controller.emit(null)
+        assertEquals(42f, viewModel.state.value.playbackSpeedKmh, 0.001f)
+    }
+
+    @Test
+    fun `external joystick speed does not replace route speed`() {
+        val viewModel = createViewModel()
+        controller.emit(stationarySession().copy(
+            mode = SimulationMode.JOYSTICK, speedSetting = SpeedSetting.Manual(9f / 3.6f),
+        ))
+        assertEquals(9f, viewModel.state.value.joystickSpeedKmh, 0.001f)
+        assertEquals(80f, viewModel.state.value.playbackSpeedKmh, 0.001f)
+    }
+
+    @Test
     fun `tapping the map sets a pending teleport point without calling the controller`() {
         val viewModel = createViewModel()
 

@@ -13,4 +13,9 @@
     <string name="simulation_notification_authorization_lost_text">RouteForge is no longer the selected mock location app, so the simulation was stopped.</string>
     <string name="simulation_overlay_title">RouteForge floating controls</string>
     <string name="simulation_overlay_drag">Drag floating controls</string>
+    <string name="simulation_overlay_speed_value">%1$d km/h</string>
+    <string name="simulation_overlay_speed_decrease">Decrease speed by 1 km/h; hold to repeat</string>
+    <string name="simulation_overlay_speed_increase">Increase speed by 1 km/h; hold to repeat</string>
+    <string name="simulation_overlay_expand">Expand controls; hold to drag</string>
+    <string name="simulation_overlay_collapse">Collapse controls; hold to drag</string>
 </resources>

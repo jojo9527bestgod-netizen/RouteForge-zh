@@ -1,6 +1,7 @@
 package com.routeforge.simulation.data
 
 import com.routeforge.coredomain.Result
+import com.routeforge.coredomain.MockLocationAuthorizationChecker
 import com.routeforge.coredomain.holder.LastKnownRealLocationHolder
 import com.routeforge.coredomain.model.LatLng
 import com.routeforge.coredomain.model.RealLocation
@@ -17,6 +18,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.runCurrent
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -50,6 +52,62 @@ class SimulationControllerImplTest {
             lastKnownRealLocationHolder = lastKnownRealLocationHolder,
             coroutineScope = backgroundScope,
         )
+
+    @Test
+    fun `speed change received during a tick is retained and used`() {
+        lateinit var controller: SimulationControllerImpl
+        controller = SimulationControllerImpl(
+            publisher,
+            object : MockLocationAuthorizationChecker {
+                override fun isAuthorized(): Boolean {
+                    controller.setSpeed(SpeedSetting.Manual(20f))
+                    return true
+                }
+            },
+            coroutineScope = backgroundScope,
+        )
+        controller.startRoute(longRoute, SpeedSetting.Manual(10f))
+        controller.tick(1.0)
+        assertEquals(20f, controller.mockedSession.value?.speedMetersPerSecond)
+        assertEquals(20.0, controller.mockedSession.value?.distanceTraveledMeters)
+    }
+
+    @Test
+    fun `pause received during a tick cannot be undone by interpolation`() {
+        lateinit var controller: SimulationControllerImpl
+        controller = SimulationControllerImpl(
+            publisher,
+            object : MockLocationAuthorizationChecker {
+                override fun isAuthorized(): Boolean {
+                    controller.pause()
+                    return true
+                }
+            },
+            coroutineScope = backgroundScope,
+        )
+        controller.startRoute(longRoute, SpeedSetting.Manual(10f))
+        controller.tick(1.0)
+        assertEquals(SimulationStatus.PAUSED, controller.mockedSession.value?.status)
+        assertEquals(0.0, controller.mockedSession.value?.distanceTraveledMeters)
+    }
+
+    @Test
+    fun `stop received during a tick cannot recreate the session`() {
+        lateinit var controller: SimulationControllerImpl
+        controller = SimulationControllerImpl(
+            publisher,
+            object : MockLocationAuthorizationChecker {
+                override fun isAuthorized(): Boolean {
+                    controller.stop()
+                    return true
+                }
+            },
+            coroutineScope = backgroundScope,
+        )
+        controller.startRoute(longRoute, SpeedSetting.Manual(10f))
+        controller.tick(1.0)
+        assertNull(controller.mockedSession.value)
+    }
 
     @Test
     fun `teleport immediately publishes the point once and reports a stationary running session`() {
@@ -187,6 +245,7 @@ class SimulationControllerImplTest {
             advanceTimeBy(6_000) // past what would have been the completion-auto-stop delay, had one been scheduled
             assertEquals(SimulationStatus.RUNNING, controller.mockedSession.value?.status)
             assertTrue((controller.mockedSession.value?.completedRuns ?: 0) >= 1)
+            controller.stop()
         }
 
     @Test
@@ -238,6 +297,7 @@ class SimulationControllerImplTest {
             val controller = createController()
             controller.startRoute(longRoute, speedSetting = SpeedSetting.Manual(10f))
             val authorizationLostDeferred = async { controller.authorizationLost.first() }
+            runCurrent()
 
             authorizationChecker.authorized = false
             controller.tick(elapsedSeconds = 1.0)
