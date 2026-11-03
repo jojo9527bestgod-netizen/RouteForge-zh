@@ -18,9 +18,9 @@
 
 项目要求 macOS、Xcode、Python 3.11+ 与 XcodeGen。运行 `bash scripts/build.sh`：校验下载固定版本依赖、执行轨迹核心测试、生成 Xcode 工程、编译并输出 `build/RouteForgeProbe-unsigned.ipa`。后续在 Windows 使用现有 iloader 账号由用户签名安装。
 
-Windows 可以准备源代码、检查配置及依赖，不能在此工作区执行 Xcode 编译。待确定 macOS 构建环境后，先处理真实编译和测试结果，再签名装机。配套 GitHub Actions 只支持手动触发，当前未上传或执行；未得到用户明确“上传”指令前不推送任何内容。
+Windows 可以准备源代码、检查配置及依赖，Xcode 编译使用 macOS。配套 GitHub Actions 只支持手动触发，按用户明确上传授权执行构建；编译产物下载后在 Windows 本地签名，不向云端提供手机配对文件或 Apple ID 登录资料。
 
-本地已完成 Swift/C 语法解析、项目 YAML / Info.plist / 构建脚本检查、依赖摘要校验，以及所调用 13 个底层函数的 arm64 库导出符号检查。核心模块写有 7 项单元测试，目前未执行；这些本地检查不等于 Xcode 类型检查、链接或真机通过。
+本地已完成 Swift/C 语法解析、项目 YAML / Info.plist / 构建脚本检查、依赖摘要校验，以及所调用 13 个底层函数的 arm64 库导出符号检查。核心模块 7 项单元测试已在 macOS 云端全部通过；App 的 Xcode 打包及真机验收仍在推进，不能仅以单元测试通过视为手机端通过。
 
 ## 手机初次配置
 

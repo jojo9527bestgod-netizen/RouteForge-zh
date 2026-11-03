@@ -40,7 +40,6 @@ targets:
         CURRENT_PROJECT_VERSION: 1
         INFOPLIST_FILE: App/Info.plist
         SWIFT_OBJC_BRIDGING_HEADER: App/Native/RouteForgeProbe-Bridging-Header.h
-        HEADER_SEARCH_PATHS: '$(inherited) $(PROJECT_DIR)/Vendor/IDevice.xcframework/ios-arm64/Headers'
         GENERATE_INFOPLIST_FILE: NO
         SUPPORTS_MACCATALYST: NO
         ENABLE_BITCODE: NO
