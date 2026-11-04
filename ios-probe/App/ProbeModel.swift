@@ -28,10 +28,14 @@ final class ProbeModel: ObservableObject {
     @Published private(set) var routeProgress = 0.0
     @Published private(set) var routeRevision = 0
     @Published private(set) var backgroundWarning: String?
+    @Published private(set) var systemLocationText = "尚未接收系统定位反馈"
+    @Published private(set) var systemSimulatedFixCount = 0
     @Published private(set) var events: [String] = []
     private let client = NativeLocationClient()
     private let pairing = PairingStore()
     private let background = BackgroundSupport()
+    private let runLog = RunLogStore()
+    private var lastSystemSimulatedPoint: GeoPoint?
     private var operation: Task<Void, Never>?
     private var generation = UUID()
     private var foreground = true
@@ -43,6 +47,9 @@ final class ProbeModel: ObservableObject {
         state = pending ? .recoveryFailed : .idle
         let savedSpeed = UserDefaults.standard.double(forKey: "simulationSpeedKmh")
         if savedSpeed.isFinite, (1...150).contains(savedSpeed) { speedKmh = savedSpeed }
+        background.onFeedback = { [weak self] feedback in self?.receive(feedback) }
+        background.onDiagnostic = { [weak self] message in self?.record(message) }
+        record("App 已启动。")
         if pending { record("上次会话未确认恢复，请先清除模拟位置并核对高德。") }
     }
     var running: Bool { state == .fixed || state == .route || state == .paused }
@@ -68,14 +75,37 @@ final class ProbeModel: ObservableObject {
     private func record(_ message: String) {
         events.append("\(ISO8601DateFormatter().string(from: Date())) \(message)")
         if events.count > 200 { events.removeFirst(events.count - 200) }
+        runLog.write(logText)
+    }
+    private func receive(_ feedback: SystemLocationFeedback) {
+        switch feedback.source {
+        case .simulated:
+            guard let point = feedback.simulatedPoint else { return }
+            let delta = lastSystemSimulatedPoint.map { $0.distance(to: point) }
+            lastSystemSimulatedPoint = point
+            systemSimulatedFixCount += 1
+            systemLocationText = "系统已返回模拟位置 · \(systemSimulatedFixCount) 次反馈"
+            if let delta, delta > 0.5 {
+                record(String(format: "系统模拟位置移动 %.1f 米。", delta))
+            } else if systemSimulatedFixCount == 1 { record("系统已返回首个模拟位置。") }
+        case .device:
+            lastSystemSimulatedPoint = nil
+            systemLocationText = "系统当前返回非模拟位置"
+        case .unknown:
+            systemLocationText = "系统已返回位置，来源尚未确认"
+        }
     }
     private func setState(_ next: ProbeState) {
         state = next
         UIApplication.shared.isIdleTimerDisabled = running && foreground
     }
     func setForeground(_ active: Bool) {
+        if foreground != active, running || state == .stopping {
+            record("\(active ? "App 回到前台" : "App 离开前台")；\(background.diagnosticStatus)")
+        }
         foreground = active
         UIApplication.shared.isIdleTimerDisabled = running && active
+        if active, running { background.resumeIfNeeded() }
     }
     private func setRecovery(_ value: Bool) {
         needsRecovery = value
@@ -191,6 +221,8 @@ final class ProbeModel: ObservableObject {
             let mode = playbackMode
             let id = UUID(); generation = id
             updateCount = 0; elapsedSeconds = 0; routeProgress = 0
+            systemSimulatedFixCount = 0; lastSystemSimulatedPoint = nil
+            systemLocationText = "等待系统返回模拟位置"
             setState(.connecting)
             operation = Task {
                 do {
@@ -199,7 +231,7 @@ final class ProbeModel: ObservableObject {
                     setRecovery(true)
                     backgroundWarning = background.start()
                     setState(path == nil ? .fixed : .route)
-                    record("会话开始；每 5 秒更新；\(durationMinutes == 0 ? "不限时" : "最长 \(durationMinutes) 分钟")；\(mode.title)。")
+                    record("会话开始；每 5 秒更新；\(durationMinutes == 0 ? "不限时" : "最长 \(durationMinutes) 分钟")；\(mode.title)；速度 \(speedKmh) km/h；\(background.diagnosticStatus)。")
                     let started = ProcessInfo.processInfo.systemUptime
                     var nextTick = started
                     var previousTick = started
@@ -218,7 +250,7 @@ final class ProbeModel: ObservableObject {
                         livePoint = point
                         if let path, let sample { routeProgress = min(1, max(0, sample.distance / path.length)) }
                         lastCoordinate = String(format: "%.6f, %.6f", point.latitude, point.longitude)
-                        record("位置更新 \(updateCount)，已运行 \(elapsedSeconds) 秒。")
+                        record("位置更新 \(updateCount)，已运行 \(elapsedSeconds) 秒，目标累计推进 \(Int(cursor.distance)) 米，速度 \(speedKmh) km/h，\(foreground ? "前台" : "后台")。")
                         if sample?.complete == true {
                             stop(reason: "路线播放完成，自动停止。"); return
                         }
@@ -252,10 +284,10 @@ final class ProbeModel: ObservableObject {
                 defer { background.stop(); backgroundWarning = nil }
                 do {
                     try await client.clear(config)
-                    setRecovery(false)
                     livePoint = nil
-                    setState(.ready)
-                    record("清除命令完成，模拟已停止；如地图显示缓存位置，可重新定位。")
+                    setState(.awaitingRecovery)
+                    systemLocationText = "清除命令已发送，等待确认真实位置"
+                    record("清除命令已发送，定位连接已释放；请核对真实位置。地图保留旧位置时，关闭并重开地图再定位。")
                 } catch {
                     setState(.recoveryFailed)
                     errorMessage = error.localizedDescription

@@ -35,6 +35,8 @@ struct ConnectionSettingsScreen: View {
                 Section("停止与恢复") {
                     Button("停止并清除模拟位置", role: .destructive) { model.stop() }.disabled(!model.canStop)
                     if model.needsRecovery, !model.running, !model.busy {
+                        Text("清除命令已发送后，请在高德核对真实位置。若保留旧位置，关闭并重开高德再定位。")
+                            .font(.caption).foregroundStyle(.secondary)
                         Button("我已确认恢复真实位置", action: model.confirmRecovery)
                     }
                     if let warning = model.backgroundWarning { Text(warning).font(.caption).foregroundStyle(.orange) }
@@ -51,6 +53,7 @@ struct ConnectionSettingsScreen: View {
                 }.disabled(model.running || model.busy)
                 DisclosureGroup("运行记录") {
                     Text("已更新 \(model.updateCount) 次 · \(model.elapsedSeconds) 秒").font(.caption)
+                    Text(model.systemLocationText).font(.caption)
                     ShareLink("导出运行记录", item: model.logText)
                     ForEach(Array(model.events.suffix(12).enumerated()), id: \.offset) { _, event in Text(event).font(.caption2.monospaced()) }
                 }

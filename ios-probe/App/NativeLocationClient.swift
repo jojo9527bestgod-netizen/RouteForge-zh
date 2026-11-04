@@ -59,20 +59,21 @@ final class NativeLocationClient: @unchecked Sendable {
 
     func clear(_ configuration: ConnectionConfiguration) async throws {
         try await perform {
+            defer {
+                rf_session_close(self.session)
+                self.session = nil
+            }
             if self.session == nil { try self.openOnQueue(configuration) }
             do {
                 try self.checked { rf_session_clear(self.session, $0, $1) }
             } catch {
                 // A failed DVT stream may be unusable. Retry clear on a fresh connection.
-                do {
-                    try self.openOnQueue(configuration)
-                    try self.checked { rf_session_clear(self.session, $0, $1) }
-                } catch {
-                    rf_session_close(self.session)
-                    self.session = nil
-                    throw error
-                }
+                try self.openOnQueue(configuration)
+                try self.checked { rf_session_clear(self.session, $0, $1) }
             }
+            // The stop selector is one-way. Give it time to reach the device before
+            // releasing the DVT channel, as in the verified desktop cleanup path.
+            Thread.sleep(forTimeInterval: 1)
         }
     }
 }

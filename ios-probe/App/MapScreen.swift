@@ -101,8 +101,8 @@ struct MapScreen: View {
     }
     private var recoveryControls: some View {
         VStack(alignment: .leading, spacing: 9) {
-            Label("上次会话需要确认恢复", systemImage: "exclamationmark.circle").font(.headline)
-            Text("若当前位置仍被模拟，请重试清除；若已在高德确认真实位置，可直接确认。")
+            Label(model.state == .awaitingRecovery ? "请确认真实位置已恢复" : "需要清除或确认真实位置", systemImage: "exclamationmark.circle").font(.headline)
+            Text("在高德核对当前位置。若仍保留旧位置，先关闭并重开高德再定位；仍未恢复可重试清除。")
                 .font(.caption).foregroundStyle(.secondary)
             HStack {
                 Button("重试清除") { model.stop() }.buttonStyle(.borderedProminent).disabled(!model.canStop)
@@ -176,6 +176,9 @@ struct MapScreen: View {
                 Spacer(); speedControls
             }
             if model.state != .fixed { ProgressView(value: model.routeProgress) }
+            Text(model.systemLocationText).font(.caption).foregroundStyle(.secondary)
+            Text("蓝点为系统位置，橙色标记为发送目标。")
+                .font(.caption2).foregroundStyle(.secondary)
             HStack(spacing: 12) {
                 if model.state != .fixed {
                     Button(action: model.togglePause) {

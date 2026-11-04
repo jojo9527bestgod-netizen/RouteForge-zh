@@ -41,9 +41,10 @@ struct RouteMapView: UIViewRepresentable {
     func updateUIView(_ map: MKMapView, context: Context) {
         let coordinator = context.coordinator
         coordinator.parent = self
-        map.mapType = satellite ? .hybrid : .standard
+        let mapType: MKMapType = satellite ? .hybrid : .standard
+        if map.mapType != mapType { map.mapType = mapType }
         let authorized = coordinator.authorized
-        map.showsUserLocation = authorized && livePoint == nil
+        if map.showsUserLocation != authorized { map.showsUserLocation = authorized }
         if coordinator.lastWaypoints != waypoints {
             map.removeAnnotations(map.annotations.compactMap { $0 as? WaypointAnnotation })
             for (index, waypoint) in waypoints.enumerated() {
@@ -106,10 +107,10 @@ struct RouteMapView: UIViewRepresentable {
         init(parent: RouteMapView) { self.parent = parent; super.init(); location.delegate = self }
         func requestLocationPermission() {
             if location.authorizationStatus == .notDetermined { location.requestWhenInUseAuthorization() }
-            map?.showsUserLocation = authorized && parent.livePoint == nil
+            map?.showsUserLocation = authorized
         }
         func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-            map?.showsUserLocation = authorized && parent.livePoint == nil
+            map?.showsUserLocation = authorized
         }
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
             var view = touch.view
@@ -141,7 +142,6 @@ struct RouteMapView: UIViewRepresentable {
         }
         func locate() {
             guard let map else { return }
-            if let point = parent.livePoint { map.setCenter(point.coordinate, animated: true); return }
             guard authorized else {
                 requestLocationPermission()
                 parent.onLocationError("请在系统设置中允许本 App 使用定位；也可继续搜索或长按地图选点。")
@@ -176,7 +176,7 @@ struct RouteMapView: UIViewRepresentable {
                 view.glyphText = pin.index == 0 ? "起" : pin.index == pin.count - 1 ? "终" : String(pin.index)
                 view.glyphImage = nil; view.isDraggable = parent.editable
             } else {
-                view.markerTintColor = .systemBlue; view.glyphText = nil
+                view.markerTintColor = .systemOrange; view.glyphText = nil
                 view.glyphImage = UIImage(systemName: "location.north.fill"); view.isDraggable = false
             }
             return view
@@ -207,6 +207,6 @@ final class WaypointAnnotation: NSObject, MKAnnotation {
 
 final class SimulationAnnotation: NSObject, MKAnnotation {
     @objc dynamic var coordinate: CLLocationCoordinate2D
-    var title: String? { "模拟位置" }
+    var title: String? { "发送目标" }
     init(coordinate: CLLocationCoordinate2D) { self.coordinate = coordinate; super.init() }
 }
