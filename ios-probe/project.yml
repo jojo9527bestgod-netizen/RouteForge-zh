@@ -28,6 +28,7 @@ targets:
       - sdk: Security.framework
       - sdk: SystemConfiguration.framework
       - sdk: Network.framework
+      - sdk: MapKit.framework
       - sdk: libc++.tbd
       - sdk: libz.tbd
       - sdk: libiconv.tbd
@@ -36,8 +37,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: net.routeforge.locationprobe
         PRODUCT_NAME: RouteForgeProbe
-        MARKETING_VERSION: 0.1.0
-        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 0.2.0
+        CURRENT_PROJECT_VERSION: 2
         INFOPLIST_FILE: App/Info.plist
         SWIFT_OBJC_BRIDGING_HEADER: App/Native/RouteForgeProbe-Bridging-Header.h
         GENERATE_INFOPLIST_FILE: NO

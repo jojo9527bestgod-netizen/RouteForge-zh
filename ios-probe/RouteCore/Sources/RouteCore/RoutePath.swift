@@ -13,7 +13,7 @@ public enum RouteError: LocalizedError {
     }
 }
 
-public struct GeoPoint: Equatable, Sendable {
+public struct GeoPoint: Equatable, Sendable, Codable {
     public let latitude: Double
     public let longitude: Double
     public init(latitude: Double, longitude: Double) throws {
@@ -21,6 +21,12 @@ public struct GeoPoint: Equatable, Sendable {
         else { throw RouteError.invalidCoordinate }
         self.latitude = latitude
         self.longitude = longitude
+    }
+    private enum CodingKeys: String, CodingKey { case latitude, longitude }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        try self.init(latitude: values.decode(Double.self, forKey: .latitude),
+                      longitude: values.decode(Double.self, forKey: .longitude))
     }
     public func distance(to other: GeoPoint) -> Double {
         let a = latitude * .pi / 180, b = other.latitude * .pi / 180

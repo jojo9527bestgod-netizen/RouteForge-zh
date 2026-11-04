@@ -4,15 +4,16 @@ import RouteCore
 import UIKit
 
 enum ImportKind { case pairing, route }
-enum ProbeState: Equatable { case idle, connecting, ready, fixed, route, stopping, awaitingRecovery, recoveryFailed }
+enum ProbeState: Equatable { case idle, connecting, ready, fixed, route, paused, stopping, awaitingRecovery, recoveryFailed }
 
 @MainActor
 final class ProbeModel: ObservableObject {
     @Published var latitudeText = "48.85837"
     @Published var longitudeText = "2.29448"
     @Published var portText = UserDefaults.standard.string(forKey: "remotePairingPort") ?? "49152"
-    @Published var speedText = "25"
-    @Published var durationMinutes = 10
+    @Published private(set) var speedKmh = 25.0
+    @Published var durationMinutes = 0
+    @Published var playbackMode = PlaybackMode.once
     @Published var errorMessage: String?
     @Published private(set) var state: ProbeState
     @Published private(set) var pairingPresent: Bool
@@ -23,6 +24,9 @@ final class ProbeModel: ObservableObject {
     @Published private(set) var updateCount = 0
     @Published private(set) var elapsedSeconds = 0
     @Published private(set) var lastCoordinate = "尚未更新"
+    @Published private(set) var livePoint: GeoPoint?
+    @Published private(set) var routeProgress = 0.0
+    @Published private(set) var routeRevision = 0
     @Published private(set) var backgroundWarning: String?
     @Published private(set) var events: [String] = []
     private let client = NativeLocationClient()
@@ -37,9 +41,12 @@ final class ProbeModel: ObservableObject {
         needsRecovery = pending
         pairingPresent = pairing.exists
         state = pending ? .recoveryFailed : .idle
+        let savedSpeed = UserDefaults.standard.double(forKey: "simulationSpeedKmh")
+        if savedSpeed.isFinite, (1...150).contains(savedSpeed) { speedKmh = savedSpeed }
         if pending { record("上次会话未确认恢复，请先清除模拟位置并核对高德。") }
     }
-    var running: Bool { state == .fixed || state == .route }
+    var running: Bool { state == .fixed || state == .route || state == .paused }
+    var paused: Bool { state == .paused }
     var busy: Bool { state == .connecting || state == .stopping || importing }
     var canStart: Bool { pairingPresent && !busy && !running && !needsRecovery }
     var canStop: Bool { pairingPresent && state != .stopping && !importing }
@@ -50,12 +57,13 @@ final class ProbeModel: ObservableObject {
         case .ready: return "定位通道已连接"
         case .fixed: return "正在模拟定点"
         case .route: return "正在播放路线"
+        case .paused: return "已暂停，保持当前位置"
         case .stopping: return "正在清除模拟位置…"
         case .awaitingRecovery: return "清除命令已完成，请确认真实定位"
         case .recoveryFailed: return "需要清除或确认真实定位"
         }
     }
-    var logText: String { (["RouteForge iOS Probe 0.1.0", "日志不包含配对文件或真实定位。"] + events).joined(separator: "\n") }
+    var logText: String { (["RouteForge iOS \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")", "日志不包含配对文件或真实定位。"] + events).joined(separator: "\n") }
 
     private func record(_ message: String) {
         events.append("\(ISO8601DateFormatter().string(from: Date())) \(message)")
@@ -80,29 +88,29 @@ final class ProbeModel: ObservableObject {
         return ConnectionConfiguration(port: port, pairingURL: pairing.url)
     }
 
-    func importFile(_ source: URL, kind: ImportKind) {
-        guard !busy, !running else { return }
+    func importFile(_ source: URL, kind: ImportKind) async -> Bool {
+        guard !busy, !running else { return false }
         importing = true
-        Task {
-            defer { importing = false }
-            do {
-                switch kind {
-                case .pairing:
-                    try await pairing.importFile(source, client: client)
-                    pairingPresent = true
-                    record("本机配对文件已验证并存入私有目录。")
-                case .route:
-                    let accessed = source.startAccessingSecurityScopedResource()
-                    defer { if accessed { source.stopAccessingSecurityScopedResource() } }
-                    let size = try source.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
-                    guard size <= 5_000_000 else { throw ProbeFailure(message: "路线文件应小于 5 MB。") }
-                    let data = try Data(contentsOf: source)
-                    route = try RouteImport.parse(data)
-                    routeName = source.deletingPathExtension().lastPathComponent
-                    record("路线导入成功，\(route!.points.count) 点。")
-                }
-            } catch { errorMessage = error.localizedDescription }
-        }
+        defer { importing = false }
+        do {
+            switch kind {
+            case .pairing:
+                try await pairing.importFile(source, client: client)
+                pairingPresent = true
+                record("本机配对文件已验证并存入私有目录。")
+            case .route:
+                let accessed = source.startAccessingSecurityScopedResource()
+                defer { if accessed { source.stopAccessingSecurityScopedResource() } }
+                let size = try source.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
+                guard size <= 5_000_000 else { throw ProbeFailure(message: "路线文件应小于 5 MB。") }
+                let data = try Data(contentsOf: source)
+                route = try RouteImport.parse(data)
+                routeName = source.deletingPathExtension().lastPathComponent
+                routeRevision += 1; routeProgress = 0
+                record("路线导入成功，\(route!.points.count) 点。")
+            }
+            return true
+        } catch { errorMessage = error.localizedDescription; return false }
     }
     func loadDemo() {
         guard !busy, !running else { return }
@@ -112,8 +120,32 @@ final class ProbeModel: ObservableObject {
             }
             route = try RouteImport.parse(Data(contentsOf: url))
             routeName = "巴黎测试环线（合成轨迹）"
+            routeRevision += 1
             record("已载入示例路线。")
         } catch { errorMessage = error.localizedDescription }
+    }
+
+    func useRoute(_ path: RoutePath, name: String) {
+        guard !running, !busy else { return }
+        route = path; routeName = name; routeRevision += 1; routeProgress = 0
+        record("路线已就绪，共 \(path.points.count) 个坐标点。")
+    }
+    func clearPlannedRoute() {
+        guard !running, !busy else { return }
+        route = nil; routeName = "未生成路线"; routeRevision += 1; routeProgress = 0
+    }
+    func changeSpeed(_ value: Double) {
+        guard value.isFinite else { return }
+        speedKmh = min(150, max(1, value))
+        UserDefaults.standard.set(speedKmh, forKey: "simulationSpeedKmh")
+    }
+    func togglePause() {
+        if state == .route { setState(.paused); record("路线已暂停，继续保持最后坐标。") }
+        else if state == .paused { setState(.route); record("路线继续播放。") }
+    }
+    func startFixed(at point: GeoPoint) {
+        latitudeText = String(point.latitude); longitudeText = String(point.longitude)
+        startFixed()
     }
 
     func connect() {
@@ -147,24 +179,18 @@ final class ProbeModel: ObservableObject {
         do {
             let config = try configuration()
             let fixed: GeoPoint
-            let speed: Double
             if let path {
                 fixed = path.points[0]
-                guard let value = Double(speedText), value.isFinite, (1...80).contains(value) else {
-                    throw ProbeFailure(message: "速度应为 1～80 km/h。")
-                }
-                speed = value
             } else {
                 guard let latitude = Double(latitudeText), let longitude = Double(longitudeText) else {
                     throw RouteError.invalidCoordinate
                 }
                 fixed = try GeoPoint(latitude: latitude, longitude: longitude)
-                speed = 0
             }
-            let speedMeters = speed / 3.6
             let limit = Double(durationMinutes * 60)
+            let mode = playbackMode
             let id = UUID(); generation = id
-            updateCount = 0; elapsedSeconds = 0
+            updateCount = 0; elapsedSeconds = 0; routeProgress = 0
             setState(.connecting)
             operation = Task {
                 do {
@@ -173,26 +199,33 @@ final class ProbeModel: ObservableObject {
                     setRecovery(true)
                     backgroundWarning = background.start()
                     setState(path == nil ? .fixed : .route)
-                    record("会话开始；每 5 秒更新；最长 \(durationMinutes) 分钟；速度 \(speed) km/h。")
+                    record("会话开始；每 5 秒更新；\(durationMinutes == 0 ? "不限时" : "最长 \(durationMinutes) 分钟")；\(mode.title)。")
                     let started = ProcessInfo.processInfo.systemUptime
                     var nextTick = started
+                    var previousTick = started
+                    var cursor = PlaybackCursor()
                     while generation == id, !Task.isCancelled {
-                        let elapsed = ProcessInfo.processInfo.systemUptime - started
-                        if elapsed >= limit { stop(reason: "达到本轮时限，自动停止。"); return }
-                        let traveled = elapsed * speedMeters
-                        let point = path?.position(at: traveled) ?? fixed
+                        let now = ProcessInfo.processInfo.systemUptime
+                        let elapsed = now - started
+                        if limit > 0, elapsed >= limit { stop(reason: "达到定时时限，自动停止。"); return }
+                        try cursor.advance(seconds: max(0, now - previousTick), speedKmh: speedKmh, paused: paused)
+                        previousTick = now
+                        let sample = path.map { cursor.sample(length: $0.length, mode: mode) }
+                        let point = path?.position(at: sample?.distance ?? 0) ?? fixed
                         try await client.set(point)
                         guard generation == id, !Task.isCancelled else { return }
                         updateCount += 1; elapsedSeconds = Int(elapsed)
+                        livePoint = point
+                        if let path, let sample { routeProgress = min(1, max(0, sample.distance / path.length)) }
                         lastCoordinate = String(format: "%.6f, %.6f", point.latitude, point.longitude)
                         record("位置更新 \(updateCount)，已运行 \(elapsedSeconds) 秒。")
-                        if let path, traveled >= path.length {
+                        if sample?.complete == true {
                             stop(reason: "路线播放完成，自动停止。"); return
                         }
                         nextTick += 5
-                        let now = ProcessInfo.processInfo.systemUptime
-                        if nextTick < now { nextTick = now + 5 }
-                        try await Task.sleep(nanoseconds: UInt64(max(0.05, nextTick - now) * 1_000_000_000))
+                        let afterSend = ProcessInfo.processInfo.systemUptime
+                        if nextTick < afterSend { nextTick = afterSend + 5 }
+                        try await Task.sleep(nanoseconds: UInt64(max(0.05, nextTick - afterSend) * 1_000_000_000))
                     }
                 } catch is CancellationError {
                     // Stop owns the queued clear; a cancelled sender must not send again.
@@ -219,8 +252,10 @@ final class ProbeModel: ObservableObject {
                 defer { background.stop(); backgroundWarning = nil }
                 do {
                     try await client.clear(config)
-                    setState(.awaitingRecovery)
-                    record("清除命令成功；等待用户在高德确认真实位置。")
+                    setRecovery(false)
+                    livePoint = nil
+                    setState(.ready)
+                    record("清除命令完成，模拟已停止；如地图显示缓存位置，可重新定位。")
                 } catch {
                     setState(.recoveryFailed)
                     errorMessage = error.localizedDescription
@@ -233,6 +268,7 @@ final class ProbeModel: ObservableObject {
     func confirmRecovery() {
         guard !running, !busy else { return }
         setRecovery(false)
+        livePoint = nil
         setState(.idle)
         record("用户确认高德已恢复真实位置。")
     }
