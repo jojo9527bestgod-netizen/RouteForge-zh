@@ -20,6 +20,7 @@ final class ProbeModel: ObservableObject {
     @Published private(set) var route: RoutePath?
     @Published private(set) var routeName = "未载入路线"
     @Published private(set) var importing = false
+    @Published private(set) var setupInProgress = false
     @Published private(set) var needsRecovery: Bool
     @Published private(set) var updateCount = 0
     @Published private(set) var elapsedSeconds = 0
@@ -33,6 +34,14 @@ final class ProbeModel: ObservableObject {
     @Published private(set) var events: [String] = []
     private let client = NativeLocationClient()
     private let pairing = PairingStore()
+    lazy var setup = DeviceSetupModel(pairing: pairing, busyChanged: { [weak self] busy in
+        self?.setupInProgress = busy
+    }, paired: { [weak self] in
+        guard let self else { return }
+        self.pairingPresent = self.pairing.exists
+        self.errorMessage = nil
+        self.record("本机配对完成，私有资料已保存。")
+    })
     private let background = BackgroundSupport()
     private let runLog = RunLogStore()
     private var lastSystemSimulatedPoint: GeoPoint?
@@ -54,10 +63,11 @@ final class ProbeModel: ObservableObject {
     }
     var running: Bool { state == .fixed || state == .route || state == .paused }
     var paused: Bool { state == .paused }
-    var busy: Bool { state == .connecting || state == .stopping || importing }
+    var busy: Bool { state == .connecting || state == .stopping || importing || setupInProgress }
     var canStart: Bool { pairingPresent && !busy && !running && !needsRecovery }
-    var canStop: Bool { pairingPresent && state != .stopping && !importing }
+    var canStop: Bool { pairingPresent && state != .stopping && !importing && !setupInProgress }
     var status: String {
+        if setupInProgress { return "正在配置本机…" }
         switch state {
         case .idle: return "等待连接"
         case .connecting: return "正在连接本机…"

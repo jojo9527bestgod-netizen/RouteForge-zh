@@ -12,6 +12,15 @@ final class PairingStore {
         url = directory.appendingPathComponent("pairingFile.plist")
     }
 
+    func generatedTemporaryURL() throws -> URL {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true,
+            attributes: [.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication])
+        var privateDirectory = directory
+        var values = URLResourceValues(); values.isExcludedFromBackup = true
+        try privateDirectory.setResourceValues(values)
+        return directory.appendingPathComponent(UUID().uuidString + ".pending.plist")
+    }
+
     func importFile(_ source: URL, client: NativeLocationClient) async throws {
         let accessing = source.startAccessingSecurityScopedResource()
         defer { if accessing { source.stopAccessingSecurityScopedResource() } }

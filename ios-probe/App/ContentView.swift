@@ -28,6 +28,11 @@ struct ContentView: View {
                 .tabItem { Label("设置", systemImage: "gearshape") }.tag(AppTab.settings)
         }
         .tint(.blue)
+        .onOpenURL { url in
+            guard url.scheme?.lowercased() == "routeforge", !model.running, !model.busy else { return }
+            tab = .settings
+            if model.pairingPresent { model.setup.check(portText: model.portText) }
+        }
         .fileImporter(isPresented: $showImporter, allowedContentTypes: [.data], allowsMultipleSelection: false) { result in
             switch result {
             case .success(let urls):

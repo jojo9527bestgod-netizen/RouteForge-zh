@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "source_commit": "e2aaeac89ca8fa56c2fa1f144d182994e07a525b",
+  "source_repository": "https://github.com/doronz88/DeveloperDiskImage",
+  "build": "27A5228h",
+  "files": [
+    {
+      "name": "BuildManifest.plist",
+      "bytes": 804946,
+      "sha256": "27385d7582b03b36bb3104e22b520aee0c47d72fecb4e8ecfe12ef5d966c7012",
+      "url": "https://raw.githubusercontent.com/doronz88/DeveloperDiskImage/e2aaeac89ca8fa56c2fa1f144d182994e07a525b/PersonalizedImages/Xcode_iOS_DDI_Cryptex/BuildManifest.plist"
+    },
+    {
+      "name": "Image.dmg",
+      "bytes": 15895040,
+      "sha256": "873097f695a8b9734e2abc54f795a8874d40ff6fd11208ecb01ef29534c7c176",
+      "url": "https://raw.githubusercontent.com/doronz88/DeveloperDiskImage/e2aaeac89ca8fa56c2fa1f144d182994e07a525b/PersonalizedImages/Xcode_iOS_DDI_Cryptex/Image.dmg"
+    },
+    {
+      "name": "Image.dmg.trustcache",
+      "bytes": 1895,
+      "sha256": "f7f21986074eee03a215aca16ecfc78d6bf183600d8a0d2fb691f9896782e6f0",
+      "url": "https://raw.githubusercontent.com/doronz88/DeveloperDiskImage/e2aaeac89ca8fa56c2fa1f144d182994e07a525b/PersonalizedImages/Xcode_iOS_DDI_Cryptex/Image.dmg.trustcache"
+    },
+    {
+      "name": "Image.dmg.cryptex_info",
+      "bytes": 430,
+      "sha256": "edf49aef55aacc063d4d7be05b713bb545ce2993b3f62bcc15eccd75e610ee6c",
+      "url": "https://raw.githubusercontent.com/doronz88/DeveloperDiskImage/e2aaeac89ca8fa56c2fa1f144d182994e07a525b/PersonalizedImages/Xcode_iOS_DDI_Cryptex/Image.dmg.cryptex_info"
+    },
+    {
+      "name": "Image.dmg.root_hash",
+      "bytes": 229,
+      "sha256": "3543fad2805b88119695c417e12679380b3b5a2742994bbcc839c8e2de5d7302",
+      "url": "https://raw.githubusercontent.com/doronz88/DeveloperDiskImage/e2aaeac89ca8fa56c2fa1f144d182994e07a525b/PersonalizedImages/Xcode_iOS_DDI_Cryptex/Image.dmg.root_hash"
+    }
+  ]
+}

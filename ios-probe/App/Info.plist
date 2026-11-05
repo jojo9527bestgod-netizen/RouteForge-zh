@@ -16,7 +16,7 @@
   <key>UILaunchScreen</key><dict/>
   <key>UISupportedInterfaceOrientations</key><array><string>UIInterfaceOrientationPortrait</string></array>
   <key>NSLocalNetworkUsageDescription</key><string>通过本机开发通道连接这台 iPhone，以设置和清除测试位置。</string>
-  <key>NSBonjourServices</key><array><string>_remotepairing._tcp</string></array>
+  <key>NSBonjourServices</key><array><string>_remotepairing._tcp</string><string>_remotepairing-pairable-host._tcp</string></array>
   <key>NSLocationWhenInUseUsageDescription</key><string>在地图显示当前位置，并在模拟会话期间维持位置通道运行；不记录你的真实位置。</string>
   <key>NSLocationAlwaysAndWhenInUseUsageDescription</key><string>切到高德后维持模拟会话；不记录你的真实位置。</string>
   <key>UIBackgroundModes</key><array><string>audio</string><string>location</string></array>

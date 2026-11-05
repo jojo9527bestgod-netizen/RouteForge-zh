@@ -21,6 +21,9 @@ targets:
         excludes: [Info.plist]
       - path: Resources
         buildPhase: resources
+      - path: Vendor/DeviceSupport
+        type: folder
+        buildPhase: resources
     dependencies:
       - package: RouteCore
       - framework: Vendor/IDevice.xcframework
@@ -37,8 +40,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: net.routeforge.locationprobe
         PRODUCT_NAME: RouteForgeProbe
-        MARKETING_VERSION: 0.2.0
-        CURRENT_PROJECT_VERSION: 3
+        MARKETING_VERSION: 0.3.0
+        CURRENT_PROJECT_VERSION: 4
         INFOPLIST_FILE: App/Info.plist
         SWIFT_OBJC_BRIDGING_HEADER: App/Native/RouteForgeProbe-Bridging-Header.h
         GENERATE_INFOPLIST_FILE: NO

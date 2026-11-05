@@ -125,7 +125,7 @@ final class BackgroundSupport: NSObject, CLLocationManagerDelegate {
         onDiagnostic?("系统定位反馈失败，代码 \(failure.code)。")
     }
 
-    private static func silentWave() -> Data {
+    static func silentWave() -> Data {
         let samples: UInt32 = 8_000
         let byteCount = samples * 2
         var data = Data("RIFF".utf8)

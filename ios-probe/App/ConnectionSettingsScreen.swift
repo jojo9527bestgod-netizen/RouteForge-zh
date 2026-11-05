@@ -13,13 +13,18 @@ struct ConnectionSettingsScreen: View {
                 Section {
                     Label(model.status, systemImage: model.running ? "location.fill" : "link")
                     Button("打开并连接 LocalDevVPN") { openVPN() }
+                        .disabled(model.busy || model.running)
+                    NavigationLink("首次配置与修复") {
+                        DeviceSetupScreen(model: model, setup: model.setup, onOpenVPN: openVPN)
+                    }.disabled(model.busy || model.running)
+                    Text(model.setup.status).font(.caption).foregroundStyle(.secondary)
                     Text(model.pairingPresent ? "本机配对资料已保存，无需重复导入。" : "首次使用请导入这台手机的配对文件。")
                         .font(.caption).foregroundStyle(.secondary)
                     Button(model.pairingPresent ? "更换本机配对文件" : "导入本机配对文件", action: onImport)
                         .disabled(model.busy || model.running)
                     Button("连接本机", action: model.connect).disabled(!model.canStart)
                 } header: { Text("定位连接") } footer: {
-                    Text("保持 LocalDevVPN 连接。初次配置完成后，日常使用不必打开 StikDebug。手机重启后若开发服务未就绪，仍可能需要重新初始化。")
+                    Text("先连接 LocalDevVPN。在“首次配置与修复”完成本机配对和服务检查；服务未就绪时可在本 App 初始化。")
                 }
                 Section {
                     Picker("播放方式", selection: $model.playbackMode) {

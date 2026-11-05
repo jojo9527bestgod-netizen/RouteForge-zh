@@ -8,6 +8,7 @@ if [[ "$(uname -s)" != "Darwin" ]]; then
 fi
 command -v xcodegen >/dev/null || { echo "Install XcodeGen first: brew install xcodegen" >&2; exit 1; }
 python3 scripts/fetch_dependencies.py
+python3 scripts/fetch_setup_assets.py
 swift test --package-path RouteCore
 xcodegen generate --spec project.yml
 xcodebuild -project RouteForgeProbe.xcodeproj -scheme RouteForgeProbe \
