@@ -9,8 +9,7 @@
 struct RFLocationSession {
     struct AdapterHandle *adapter;
     struct RsdHandshakeHandle *handshake;
-    struct RemoteServerHandle *server;
-    struct LocationSimulationHandle *location;
+    struct RFCoreLocationHandle *location;
 };
 
 static int failure(struct IdeviceFfiError *error, const char *stage,
@@ -30,8 +29,7 @@ static int invalid(const char *text, char *message, size_t capacity) {
 
 void rf_session_close(RFLocationSession *session) {
     if (!session) return;
-    if (session->location) location_simulation_free(session->location);
-    if (session->server) remote_server_free(session->server);
+    if (session->location) rf_core_location_free(session->location);
     if (session->handshake) rsd_handshake_free(session->handshake);
     if (session->adapter) adapter_free(session->adapter);
     free(session);
@@ -57,7 +55,9 @@ int rf_session_open(uint16_t port, const char *pairing_path,
     if (code) goto failed;
     struct sockaddr_in address;
     memset(&address, 0, sizeof(address));
+#ifdef __APPLE__
     address.sin_len = sizeof(address);
+#endif
     address.sin_family = AF_INET;
     address.sin_port = htons(port);
     inet_pton(AF_INET, "10.7.0.1", &address.sin_addr);
@@ -68,11 +68,8 @@ int rf_session_open(uint16_t port, const char *pairing_path,
     rp_pairing_file_free(pairing);
     pairing = NULL;
     if (code) goto failed;
-    code = failure(remote_server_connect_rsd(session->adapter, session->handshake, &session->server),
-        "开发者定位服务未就绪，请先完成开发者映像初始化", message, capacity);
-    if (code) goto failed;
-    code = failure(location_simulation_new(session->server, &session->location),
-        "无法打开位置模拟服务", message, capacity);
+    code = failure(rf_core_location_connect_rsd(session->adapter, session->handshake, &session->location),
+        "系统路线服务未就绪，请先检查本机连接与初始化", message, capacity);
     if (code) goto failed;
     *out = session;
     return 0;
@@ -87,11 +84,18 @@ int rf_session_set(RFLocationSession *session, double latitude, double longitude
     if (!session || !session->location) return invalid("位置通道未连接", message, capacity);
     if (!isfinite(latitude) || !isfinite(longitude) || fabs(latitude) > 90 || fabs(longitude) > 180)
         return invalid("经纬度超出范围", message, capacity);
-    return failure(location_simulation_set(session->location, latitude, longitude),
+    return failure(rf_core_location_set(session->location, latitude, longitude),
                    "位置更新失败", message, capacity);
+}
+
+int rf_session_route(RFLocationSession *session, const RFWaypoint *points, size_t count,
+                     double speed_mps, char *message, size_t capacity) {
+    if (!session || !session->location) return invalid("位置通道未连接", message, capacity);
+    return failure(rf_core_location_start(session->location, points, count, speed_mps),
+                   "系统路线播放失败", message, capacity);
 }
 
 int rf_session_clear(RFLocationSession *session, char *message, size_t capacity) {
     if (!session || !session->location) return invalid("位置通道未连接", message, capacity);
-    return failure(location_simulation_clear(session->location), "清除模拟位置失败", message, capacity);
+    return failure(rf_core_location_clear(session->location), "清除模拟位置失败", message, capacity);
 }

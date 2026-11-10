@@ -57,6 +57,15 @@ final class NativeLocationClient: @unchecked Sendable {
         }
     }
 
+    func play(_ points: [GeoPoint], speedKmh: Double) async throws {
+        try await perform {
+            let waypoints = points.map { RFWaypoint(latitude: $0.latitude, longitude: $0.longitude) }
+            try waypoints.withUnsafeBufferPointer { buffer in
+                try self.checked { rf_session_route(self.session, buffer.baseAddress, buffer.count, speedKmh / 3.6, $0, $1) }
+            }
+        }
+    }
+
     func clear(_ configuration: ConnectionConfiguration) async throws {
         try await perform {
             defer {
@@ -67,13 +76,11 @@ final class NativeLocationClient: @unchecked Sendable {
             do {
                 try self.checked { rf_session_clear(self.session, $0, $1) }
             } catch {
-                // A failed DVT stream may be unusable. Retry clear on a fresh connection.
+                // A failed stream may be unusable. Retry clear on a fresh connection.
                 try self.openOnQueue(configuration)
                 try self.checked { rf_session_clear(self.session, $0, $1) }
             }
-            // The stop selector is one-way. Give it time to reach the device before
-            // releasing the DVT channel, as in the verified desktop cleanup path.
-            Thread.sleep(forTimeInterval: 1)
+            // CoreDevice has acknowledged the clear before the channel is released.
         }
     }
 }

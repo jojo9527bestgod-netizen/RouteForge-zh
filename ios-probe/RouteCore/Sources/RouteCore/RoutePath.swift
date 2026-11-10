@@ -77,4 +77,17 @@ public struct RoutePath: Sendable {
         let fraction = (distance - cumulative[start]) / (cumulative[low] - cumulative[start])
         return points[start].interpolated(to: points[low], fraction: fraction)
     }
+
+    /// Keep the original bends and an interpolated starting point when resuming.
+    public func section(from start: Double, to end: Double) -> [GeoPoint] {
+        let low = max(0, min(length, min(start, end)))
+        let high = max(0, min(length, max(start, end)))
+        var result = [position(at: low)]
+        for index in points.indices where cumulative[index] > low && cumulative[index] < high {
+            result.append(points[index])
+        }
+        let finish = position(at: high)
+        if result.last != finish { result.append(finish) }
+        return start > end ? Array(result.reversed()) : result
+    }
 }

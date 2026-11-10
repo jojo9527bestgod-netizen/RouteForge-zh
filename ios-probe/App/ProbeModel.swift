@@ -12,8 +12,12 @@ final class ProbeModel: ObservableObject {
     @Published var longitudeText = "2.29448"
     @Published var portText = UserDefaults.standard.string(forKey: "remotePairingPort") ?? "49152"
     @Published private(set) var speedKmh = 25.0
-    @Published var durationMinutes = 0
-    @Published var playbackMode = PlaybackMode.once
+    @Published var durationMinutes = UserDefaults.standard.object(forKey: "simulationDurationMinutes") as? Int ?? 10 {
+        didSet { UserDefaults.standard.set(durationMinutes, forKey: "simulationDurationMinutes") }
+    }
+    @Published var playbackMode = PlaybackMode(rawValue: UserDefaults.standard.string(forKey: "simulationPlaybackMode") ?? "") ?? .once {
+        didSet { UserDefaults.standard.set(playbackMode.rawValue, forKey: "simulationPlaybackMode") }
+    }
     @Published var errorMessage: String?
     @Published private(set) var state: ProbeState
     @Published private(set) var pairingPresent: Bool
@@ -180,8 +184,8 @@ final class ProbeModel: ObservableObject {
         UserDefaults.standard.set(speedKmh, forKey: "simulationSpeedKmh")
     }
     func togglePause() {
-        if state == .route { setState(.paused); record("路线已暂停，继续保持最后坐标。") }
-        else if state == .paused { setState(.route); record("路线继续播放。") }
+        if state == .route { setState(.paused); record("正在暂停系统路线，保持当前位置。") }
+        else if state == .paused { setState(.route); record("正在继续系统路线。") }
     }
     func startFixed(at point: GeoPoint) {
         latitudeText = String(point.latitude); longitudeText = String(point.longitude)
@@ -241,33 +245,61 @@ final class ProbeModel: ObservableObject {
                     setRecovery(true)
                     backgroundWarning = background.start()
                     setState(path == nil ? .fixed : .route)
-                    record("会话开始；每 5 秒更新；\(durationMinutes == 0 ? "不限时" : "最长 \(durationMinutes) 分钟")；\(mode.title)；速度 \(speedKmh) km/h；\(background.diagnosticStatus)。")
+                    record("会话开始；CoreDevice 系统路线，间隔 1 秒；\(limit == 0 ? "不限时" : "最长 \(Int(limit / 60)) 分钟")；\(mode.title)；速度 \(speedKmh) km/h；\(background.diagnosticStatus)。")
                     let started = ProcessInfo.processInfo.systemUptime
-                    var nextTick = started
                     var previousTick = started
                     var cursor = PlaybackCursor()
+                    var sent = false
+                    var legBoundary = 0.0
+                    var activeSpeed = speedKmh
+                    var activePaused = false
+                    var nextLog = 0
                     while generation == id, !Task.isCancelled {
                         let now = ProcessInfo.processInfo.systemUptime
                         let elapsed = now - started
                         if limit > 0, elapsed >= limit { stop(reason: "达到定时时限，自动停止。"); return }
-                        try cursor.advance(seconds: max(0, now - previousTick), speedKmh: speedKmh, paused: paused)
+                        // Account for the command that was actually running during
+                        // this interval, before applying a newly requested control.
+                        try cursor.advance(seconds: sent ? max(0, now - previousTick) : 0,
+                                           speedKmh: activeSpeed, paused: activePaused)
                         previousTick = now
                         let sample = path.map { cursor.sample(length: $0.length, mode: mode) }
                         let point = path?.position(at: sample?.distance ?? 0) ?? fixed
-                        try await client.set(point)
-                        guard generation == id, !Task.isCancelled else { return }
-                        updateCount += 1; elapsedSeconds = Int(elapsed)
-                        livePoint = point
-                        if let path, let sample { routeProgress = min(1, max(0, sample.distance / path.length)) }
-                        lastCoordinate = String(format: "%.6f, %.6f", point.latitude, point.longitude)
-                        record("位置更新 \(updateCount)，已运行 \(elapsedSeconds) 秒，目标累计推进 \(Int(cursor.distance)) 米，速度 \(speedKmh) km/h，\(foreground ? "前台" : "后台")。")
                         if sample?.complete == true {
                             stop(reason: "路线播放完成，自动停止。"); return
                         }
-                        nextTick += 5
-                        let afterSend = ProcessInfo.processInfo.systemUptime
-                        if nextTick < afterSend { nextTick = afterSend + 5 }
-                        try await Task.sleep(nanoseconds: UInt64(max(0.05, nextTick - afterSend) * 1_000_000_000))
+                        let requestedPause = paused
+                        let requestedSpeed = speedKmh
+                        if let path {
+                            if !sent || requestedPause != activePaused ||
+                                (!requestedPause && (requestedSpeed != activeSpeed || cursor.distance >= legBoundary)) {
+                                if requestedPause {
+                                    try await client.set(point)
+                                    record("系统已确认暂停，保持当前位置。")
+                                } else {
+                                    let leg = try NativeRouteLeg(path: path, traveled: cursor.distance, mode: mode)
+                                    try await client.play(leg.points, speedKmh: requestedSpeed)
+                                    legBoundary = leg.boundary
+                                    record("系统已接收路线段，共 \(leg.points.count) 点，速度 \(requestedSpeed) km/h。")
+                                }
+                                updateCount += 1
+                            }
+                        } else if !sent {
+                            try await client.set(point)
+                            updateCount += 1
+                            record("系统已接收定点位置。")
+                        }
+                        guard generation == id, !Task.isCancelled else { return }
+                        sent = true; activeSpeed = requestedSpeed; activePaused = requestedPause
+                        elapsedSeconds = Int(elapsed)
+                        livePoint = point
+                        if let path, let sample { routeProgress = min(1, max(0, sample.distance / path.length)) }
+                        lastCoordinate = String(format: "%.6f, %.6f", point.latitude, point.longitude)
+                        if elapsedSeconds >= nextLog {
+                            record("播放进度，已运行 \(elapsedSeconds) 秒，预计累计推进 \(Int(cursor.distance)) 米，速度 \(activeSpeed) km/h，\(activePaused ? "暂停" : "播放")，\(foreground ? "前台" : "后台")；系统指令 \(updateCount) 次。")
+                            nextLog = elapsedSeconds + 5
+                        }
+                        try await Task.sleep(nanoseconds: 1_000_000_000)
                     }
                 } catch is CancellationError {
                     // Stop owns the queued clear; a cancelled sender must not send again.
@@ -296,8 +328,8 @@ final class ProbeModel: ObservableObject {
                     try await client.clear(config)
                     livePoint = nil
                     setState(.awaitingRecovery)
-                    systemLocationText = "清除命令已发送，等待确认真实位置"
-                    record("清除命令已发送，定位连接已释放；请核对真实位置。地图保留旧位置时，关闭并重开地图再定位。")
+                    systemLocationText = "系统已确认清除，等待确认真实位置"
+                    record("系统已确认清除模拟位置，定位连接已释放；请核对真实位置。地图保留旧位置时，关闭并重开地图再定位。")
                 } catch {
                     setState(.recoveryFailed)
                     errorMessage = error.localizedDescription

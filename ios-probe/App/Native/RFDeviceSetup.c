@@ -1,4 +1,5 @@
 #include "RFDeviceSetup.h"
+#include "RFCoreLocation.h"
 #include "idevice.h"
 #include <arpa/inet.h>
 #include <errno.h>
@@ -178,14 +179,10 @@ int rf_setup_probe(uint16_t port, const char *pairing_path, int *ready, char *me
     struct SetupTransport transport = {0};
     int code = transport_open(port, pairing_path, &transport, message, capacity);
     if (!code) {
-        struct RemoteServerHandle *server = NULL;
-        struct LocationSimulationHandle *location = NULL;
-        int unavailable = fail(remote_server_connect_rsd(transport.adapter, transport.handshake, &server),
-                               "开发服务尚未就绪", message, capacity);
-        if (!unavailable) unavailable = fail(location_simulation_new(server, &location),
-                                            "定位服务尚未就绪", message, capacity);
-        if (location) location_simulation_free(location);
-        if (server) remote_server_free(server);
+        struct RFCoreLocationHandle *location = NULL;
+        int unavailable = fail(rf_core_location_connect_rsd(transport.adapter, transport.handshake, &location),
+                               "系统路线服务尚未就绪", message, capacity);
+        if (location) rf_core_location_free(location);
         *ready = unavailable == 0;
     }
     transport_close(&transport);

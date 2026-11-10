@@ -57,7 +57,7 @@ struct ConnectionSettingsScreen: View {
                     }
                 }.disabled(model.running || model.busy)
                 DisclosureGroup("运行记录") {
-                    Text("已更新 \(model.updateCount) 次 · \(model.elapsedSeconds) 秒").font(.caption)
+                    Text("系统指令 \(model.updateCount) 次 · 已运行 \(model.elapsedSeconds) 秒").font(.caption)
                     Text(model.systemLocationText).font(.caption)
                     ShareLink("导出运行记录", item: model.logText)
                     ForEach(Array(model.events.suffix(12).enumerated()), id: \.offset) { _, event in Text(event).font(.caption2.monospaced()) }

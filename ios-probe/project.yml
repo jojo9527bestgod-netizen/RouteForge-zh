@@ -41,7 +41,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: net.routeforge.locationprobe
         PRODUCT_NAME: RouteForgeProbe
         MARKETING_VERSION: 0.3.0
-        CURRENT_PROJECT_VERSION: 4
+        CURRENT_PROJECT_VERSION: 5
         INFOPLIST_FILE: App/Info.plist
         SWIFT_OBJC_BRIDGING_HEADER: App/Native/RouteForgeProbe-Bridging-Header.h
         GENERATE_INFOPLIST_FILE: NO
