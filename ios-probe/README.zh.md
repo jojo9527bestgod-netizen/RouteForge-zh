@@ -60,7 +60,7 @@ build 3 同原始巴黎环线的拔线对照随后也由用户确认持续移动
 
 ## 编译与签名
 
-需要 macOS、Xcode 27、Python 3.12+、XcodeGen 与 rustup。执行 `bash scripts/build.sh`：校验固定依赖和源码，使用固定 Rust 1.99.1 编译含本项目扩展的单一通信库、核对新增导出、执行 RouteCore 测试、生成 Xcode 工程、编译，再输出 `build/RouteForgeProbe-unsigned.ipa`。IPA 需在 Windows 使用现有 iloader 账号签名安装，云端不接收 Apple ID 资料和手机配对文件。
+需要 macOS、Xcode 27、Python 3.12+、XcodeGen 与 rustup。执行 `bash scripts/build.sh`：校验固定依赖和源码，使用固定 Rust 1.94.0 编译含本项目扩展的单一通信库、核对新增导出、执行 RouteCore 测试、生成 Xcode 工程、编译，再输出 `build/RouteForgeProbe-unsigned.ipa`。固定编译器版本用于匹配 Xcode 27 的 LLVM 21 工具。IPA 需在 Windows 使用现有 iloader 账号签名安装，云端不接收 Apple ID 资料和手机配对文件。
 
 GitHub Actions 仅手动触发，产物保留 3 天。遵循项目 AGENTS.md：允许本地编译、测试、签名和更新手机；只有用户明确要求上传或发布时才推送 GitHub，不能每次修改后自动上传。
 

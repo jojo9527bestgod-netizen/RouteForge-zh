@@ -18,7 +18,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_URL = "https://api.github.com/repos/jkcoxson/idevice/tarball/v0.1.68"
 SOURCE_SHA256 = "b4668726cff51ad1813837f7d17689badc95612aa83f81471aa99317d543f357"
-RUST_VERSION = "1.99.1"
+# Match Xcode 27's LLVM 21 reader; newer Rust bitcode is not readable by nm/ld.
+RUST_VERSION = "1.94.0"
 FEATURES = "full,aws-lc"
 
 
