@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 struct RFLocationSession {
     struct AdapterHandle *adapter;
@@ -31,7 +32,13 @@ void rf_session_close(RFLocationSession *session) {
     if (!session) return;
     if (session->location) rf_core_location_free(session->location);
     if (session->handshake) rsd_handshake_free(session->handshake);
-    if (session->adapter) adapter_free(session->adapter);
+    if (session->adapter) {
+        /* Streams can retain adapter clones in background readers. Explicitly
+         * terminate this session's stack before releasing the public handle. */
+        struct IdeviceFfiError *error = adapter_close(session->adapter);
+        if (error) idevice_error_free(error);
+        adapter_free(session->adapter);
+    }
     free(session);
 }
 
@@ -97,5 +104,9 @@ int rf_session_route(RFLocationSession *session, const RFWaypoint *points, size_
 
 int rf_session_clear(RFLocationSession *session, char *message, size_t capacity) {
     if (!session || !session->location) return invalid("位置通道未连接", message, capacity);
-    return failure(rf_core_location_clear(session->location), "清除模拟位置失败", message, capacity);
+    int code = failure(rf_core_location_clear(session->location), "清除模拟位置失败", message, capacity);
+    /* The RPC acknowledgement precedes location consumers receiving the change.
+     * Keep the stream alive briefly before closing its tunnel in session_close. */
+    if (!code) usleep(1000000);
+    return code;
 }

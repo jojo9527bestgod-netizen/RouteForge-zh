@@ -150,7 +150,11 @@ int rf_pair_host_accept(RFPairingHost *host, const char *output_path,
 struct SetupTransport { struct AdapterHandle *adapter; struct RsdHandshakeHandle *handshake; };
 static void transport_close(struct SetupTransport *transport) {
     if (transport->handshake) rsd_handshake_free(transport->handshake);
-    if (transport->adapter) adapter_free(transport->adapter);
+    if (transport->adapter) {
+        struct IdeviceFfiError *error = adapter_close(transport->adapter);
+        if (error) idevice_error_free(error);
+        adapter_free(transport->adapter);
+    }
 }
 static int transport_open(uint16_t port, const char *path, struct SetupTransport *out,
                           char *message, size_t capacity) {

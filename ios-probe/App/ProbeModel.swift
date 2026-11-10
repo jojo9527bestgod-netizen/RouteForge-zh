@@ -80,7 +80,7 @@ final class ProbeModel: ObservableObject {
         case .route: return "正在播放路线"
         case .paused: return "已暂停，保持当前位置"
         case .stopping: return "正在清除模拟位置…"
-        case .awaitingRecovery: return "清除命令已完成，请确认真实定位"
+        case .awaitingRecovery: return "已发送停止请求，请核对真实定位"
         case .recoveryFailed: return "需要清除或确认真实定位"
         }
     }
@@ -328,8 +328,8 @@ final class ProbeModel: ObservableObject {
                     try await client.clear(config)
                     livePoint = nil
                     setState(.awaitingRecovery)
-                    systemLocationText = "系统已确认清除，等待确认真实位置"
-                    record("系统已确认清除模拟位置，定位连接已释放；请核对真实位置。地图保留旧位置时，关闭并重开地图再定位。")
+                    systemLocationText = "系统已接受清除请求，请核对真实位置"
+                    record("系统已接受清除请求，本机会话已关闭；真实位置恢复尚待核对。地图保留旧位置时，关闭并重开地图再定位。")
                 } catch {
                     setState(.recoveryFailed)
                     errorMessage = error.localizedDescription

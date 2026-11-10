@@ -80,7 +80,8 @@ final class NativeLocationClient: @unchecked Sendable {
                 try self.openOnQueue(configuration)
                 try self.checked { rf_session_clear(self.session, $0, $1) }
             }
-            // CoreDevice has acknowledged the clear before the channel is released.
+            // C waits briefly after the clear acknowledgement. session_close then
+            // explicitly shuts down the adapter, including retained stream clones.
         }
     }
 }
